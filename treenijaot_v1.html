@@ -592,6 +592,76 @@
     transition: all 0.15s;
   }
   .shuffle-btn:active { transform: scale(0.98); }
+
+  /* WIN PREDICTION */
+  .prediction {
+    margin-top: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .prediction-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 10px 12px 6px;
+  }
+  .prediction-bar-wrap {
+    display: flex;
+    height: 36px;
+    margin: 0 12px;
+    border-radius: 6px;
+    overflow: hidden;
+    gap: 2px;
+  }
+  .prediction-bar-a {
+    background: linear-gradient(90deg, var(--team-a-accent), #3a7bd5);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 8px;
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
+    min-width: 0;
+    overflow: hidden;
+  }
+  .prediction-bar-b {
+    background: linear-gradient(90deg, #c0392b, var(--team-b-accent));
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 8px;
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
+    min-width: 0;
+    overflow: hidden;
+  }
+  .prediction-bar-pct {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 15px;
+    color: rgba(255,255,255,0.9);
+    white-space: nowrap;
+  }
+  .prediction-labels {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 12px 12px;
+  }
+  .prediction-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .prediction-label-a { color: var(--team-a-accent); text-align: left; }
+  .prediction-label-b { color: var(--team-b-accent); text-align: right; }
+  .prediction-name { font-size: 12px; opacity: 0.8; font-weight: 600; }
 </style>
 </head>
 <body>
@@ -610,6 +680,7 @@
 
 <!-- ATTENDANCE VIEW -->
 <div class="view active" id="view-attendance">
+  <button class="shuffle-btn" style="margin-bottom:8px;" onclick="clearAttendance()">✕ Tyhjennä läsnäolot</button>
   <div id="attendanceList"></div>
 </div>
 
@@ -665,7 +736,10 @@
     </div>
   </div>
 
-  <div class="section-label">Pelaajat</div>
+  <div class="section-label" style="display:flex;justify-content:space-between;align-items:center;">
+    <span>Pelaajat</span>
+    <span id="playerCount" style="font-size:11px;background:var(--surface2);color:var(--text-muted);border:1px solid var(--border);border-radius:20px;padding:2px 8px;font-weight:700;letter-spacing:1px;"></span>
+  </div>
   <div id="manageList"></div>
 
   <button class="clear-btn" onclick="clearStorage()">🗑 Palauta oletusasetukset</button>
@@ -706,48 +780,49 @@
 const POS_PLURAL = { D: 'Puolustajat', M: 'Keskikentät', F: 'Hyökkääjät' };
 const POS_SHORT = { D: 'PUO', M: 'KK', F: 'HYÖ' };
 
-    function getDefaultPlayers() {
-        return [
-            { id: 1, name: 'Apa', pos: 'M', level: 100, active: true, present: false },
-            { id: 2, name: 'Ari', pos: 'F', level: 100, active: true, present: false },
-            { id: 3, name: 'Aku', pos: 'M', level: 100, active: true, present: false },
-            { id: 4, name: 'Arto', pos: 'M', level: 100, active: true, present: false },
-            { id: 5, name: 'Charlie', pos: 'F', level: 70, active: true, present: false },
-            { id: 6, name: 'Eero', pos: 'M', level: 100, active: true, present: false },
-            { id: 7, name: 'Ilpo', pos: 'M', level: 100, active: true, present: false },
-            { id: 8, name: 'Esko H.', pos: 'D', level: 80, active: true, present: false },
-            { id: 9, name: 'H-P', pos: 'M', level: 100, active: true, present: false },
-            { id: 10, name: 'Hanski M.', pos: 'D', level: 100, active: true, present: false },
-            { id: 11, name: 'Harry', pos: 'M', level: 70, active: true, present: false },
-            { id: 12, name: 'Heikki H.', pos: 'M', level: 90, active: true, present: false },
-            { id: 13, name: 'Ilkka J.', pos: 'M', level: 80, active: false, present: false },
-            { id: 14, name: 'Ilkka M.', pos: 'M', level: 80, active: true, present: false },
-            { id: 15, name: 'Jouni K.', pos: 'D', level: 80, active: true, present: false },
-            { id: 16, name: 'Suiho', pos: 'M', level: 80, active: true, present: false },
-            { id: 17, name: 'Jussi H.', pos: 'M', level: 80, active: true, present: false },
-            { id: 18, name: 'Mikko E.', pos: 'M', level: 90, active: true, present: false },
-            { id: 19, name: 'Ralla', pos: 'M', level: 80, active: true, present: false },
-            { id: 20, name: 'Risto P.', pos: 'D', level: 60, active: false, present: false },
-            { id: 21, name: 'Tasi', pos: 'M', level: 70, active: false, present: false },
-            { id: 22, name: 'Timo J.', pos: 'M', level: 100, active: true, present: false },
-            { id: 23, name: 'Jampe', pos: 'D', level: 80, active: true, present: false },
-            { id: 24, name: 'Jokke', pos: 'M', level: 90, active: true, present: false },
-            { id: 25, name: 'Hati', pos: 'M', level: 70, active: true, present: false },
-            { id: 26, name: 'Tero', pos: 'F', level: 60, active: true, present: false },
-            { id: 27, name: 'Matti M.', pos: 'F', level: 50, active: true, present: false },
-            { id: 28, name: 'Hannu S.', pos: 'D', level: 80, active: true, present: false },
-            { id: 29, name: 'Jooa', pos: 'M', level: 100, active: false, present: false },
-            { id: 30, name: 'Juusa', pos: 'M', level: 100, active: false, present: false },
-            { id: 31, name: 'Niki', pos: 'M', level: 100, active: false, present: false },
-            { id: 32, name: 'Luca', pos: 'M', level: 80, active: false, present: false },
-            { id: 33, name: 'Kille', pos: 'F', level: 70, active: true, present: false },
-            { id: 34, name: 'Keijo', pos: 'D', level: 60, active: false, present: false },
-            { id: 35, name: 'Jussi N.', pos: 'D', level: 90, active: true, present: false },
-            { id: 36, name: 'Jouni T.', pos: 'F', level: 70, active: true, present: false },
-            { id: 37, name: 'Markus', pos: 'M', level: 80, active: false, present: false },
-            { id: 38, name: 'Ana', pos: 'M', level: 50, active: false, present: false },
-        ];
-    }
+function getDefaultPlayers() {
+    return [
+        { id: 1, name: 'Apa', pos: 'M', level: 100, active: true, present: false },
+        { id: 2, name: 'Ari', pos: 'F', level: 100, active: true, present: false },
+        { id: 3, name: 'Aku', pos: 'M', level: 100, active: true, present: false },
+        { id: 4, name: 'Arto', pos: 'M', level: 100, active: true, present: false },
+        { id: 5, name: 'Charlie', pos: 'F', level: 70, active: true, present: false },
+        { id: 6, name: 'Eero', pos: 'M', level: 100, active: true, present: false },
+        { id: 7, name: 'Ilpo', pos: 'M', level: 100, active: true, present: false },
+        { id: 8, name: 'Esko H.', pos: 'D', level: 80, active: true, present: false },
+        { id: 9, name: 'H-P', pos: 'M', level: 100, active: true, present: false },
+        { id: 10, name: 'Hanski M.', pos: 'D', level: 100, active: true, present: false },
+        { id: 11, name: 'Harry', pos: 'M', level: 70, active: true, present: false },
+        { id: 12, name: 'Heikki H.', pos: 'M', level: 90, active: true, present: false },
+        { id: 13, name: 'Ilkka J.', pos: 'M', level: 80, active: false, present: false },
+        { id: 14, name: 'Ilkka M.', pos: 'M', level: 80, active: true, present: false },
+        { id: 15, name: 'Jouni K.', pos: 'D', level: 80, active: true, present: false },
+        { id: 16, name: 'Suiho', pos: 'M', level: 80, active: true, present: false },
+        { id: 17, name: 'Jussi H.', pos: 'M', level: 80, active: true, present: false },
+        { id: 18, name: 'Mikko E.', pos: 'M', level: 90, active: true, present: false },
+        { id: 19, name: 'Ralla', pos: 'M', level: 80, active: true, present: false },
+        { id: 20, name: 'Risto P.', pos: 'D', level: 60, active: false, present: false },
+        { id: 21, name: 'Tasi', pos: 'M', level: 70, active: false, present: false },
+        { id: 22, name: 'Timo J.', pos: 'M', level: 100, active: true, present: false },
+        { id: 23, name: 'Jampe', pos: 'D', level: 80, active: true, present: false },
+        { id: 24, name: 'Jokke', pos: 'D', level: 90, active: true, present: false },
+        { id: 25, name: 'Hati', pos: 'M', level: 70, active: true, present: false },
+        { id: 26, name: 'Tero', pos: 'F', level: 60, active: true, present: false },
+        { id: 27, name: 'Matti M.', pos: 'F', level: 50, active: true, present: false },
+        { id: 28, name: 'Hannu S.', pos: 'D', level: 80, active: true, present: false },
+        { id: 29, name: 'Jooa', pos: 'M', level: 100, active: false, present: false },
+        { id: 30, name: 'Juusa', pos: 'M', level: 100, active: false, present: false },
+        { id: 31, name: 'Niki', pos: 'M', level: 100, active: false, present: false },
+        { id: 32, name: 'Luca', pos: 'M', level: 80, active: false, present: false },
+        { id: 33, name: 'Kille', pos: 'F', level: 70, active: true, present: false },
+        { id: 34, name: 'Keijo', pos: 'D', level: 60, active: false, present: false },
+        { id: 35, name: 'Jussi N.', pos: 'D', level: 90, active: false, present: false },
+        { id: 36, name: 'Jouni T.', pos: 'F', level: 70, active: true, present: false },
+        { id: 37, name: 'Markus', pos: 'M', level: 80, active: false, present: false },
+        { id: 38, name: 'Ana', pos: 'M', level: 50, active: false, present: false },
+        { id: 39, name: 'Manlio', pos: 'M', level: 80, active: false, present: false },
+    ];
+}
 
 let players = JSON.parse(localStorage.getItem('treenijaot_players') || 'null') || getDefaultPlayers();
 
@@ -784,6 +859,12 @@ function switchTab(tab) {
       document.getElementById('showPercentsLabel').textContent = 'Näytä prosentit: ' + (showPercents ? 'Kyllä' : 'Ei');
     }
   }
+}
+
+function clearAttendance() {
+  players.forEach(p => p.present = false);
+  save();
+  renderAttendance();
 }
 
 // --- ATTENDANCE ---
@@ -869,6 +950,14 @@ function splitTeams() {
   renderTeamBoxes(currentTeams);
 }
 
+function winScore(team) {
+  // Primary: count of 100% midfielders, secondary: count of 100% defenders, tertiary: avg level
+  const fullMids = team.filter(p => p.pos === 'M' && p.level === 100).length;
+  const fullDefs = team.filter(p => p.pos === 'D' && p.level === 100).length;
+  const avg = team.length ? team.reduce((s, p) => s + p.level, 0) / team.length : 0;
+  return fullMids * 1000 + fullDefs * 100 + avg;
+}
+
 function renderTeamBoxes({ teamA, teamB, sumA, sumB }) {
   const avgA = teamA.length ? Math.round(sumA / teamA.length) : 0;
   const avgB = teamB.length ? Math.round(sumB / teamB.length) : 0;
@@ -887,6 +976,11 @@ function renderTeamBoxes({ teamA, teamB, sumA, sumB }) {
     </div>`;
   };
 
+  const sA = winScore(teamA), sB = winScore(teamB);
+  const total = sA + sB || 1;
+  const pctA = Math.round(sA / total * 100);
+  const pctB = 100 - pctA;
+
   document.getElementById('teamsResult').innerHTML = `
     <div class="teams-grid">
       <div class="team-box team-a">
@@ -902,6 +996,27 @@ function renderTeamBoxes({ teamA, teamB, sumA, sumB }) {
           <span class="team-strength">Ø ${avgB}%</span>
         </div>
         <div class="team-players">${sortTeam(teamB).map(p => playerRow(p, 'B')).join('')}</div>
+      </div>
+    </div>
+    <div class="prediction">
+      <div class="prediction-title">⚡ Voittoennuste</div>
+      <div class="prediction-bar-wrap">
+        <div class="prediction-bar-a" style="width:${pctA}%">
+          <span class="prediction-bar-pct">${pctA > 12 ? pctA + '%' : ''}</span>
+        </div>
+        <div class="prediction-bar-b" style="width:${pctB}%">
+          <span class="prediction-bar-pct">${pctB > 12 ? pctB + '%' : ''}</span>
+        </div>
+      </div>
+      <div class="prediction-labels">
+        <div class="prediction-label prediction-label-a">
+          <span style="font-size:18px;font-weight:900;">${pctA}%</span>
+          <span class="prediction-name">Liivittömät</span>
+        </div>
+        <div class="prediction-label prediction-label-b">
+          <span style="font-size:18px;font-weight:900;">${pctB}%</span>
+          <span class="prediction-name">Liivilliset</span>
+        </div>
       </div>
     </div>
     <button class="shuffle-btn" onclick="shuffleTeams()">🔀 Sekoita uudelleen</button>
@@ -946,6 +1061,8 @@ function toggleShowPercents() {
 // --- MANAGE ---
 function renderManage() {
   const list = document.getElementById('manageList');
+  const countEl = document.getElementById('playerCount');
+  if (countEl) countEl.textContent = players.length + ' pelaajaa';
   if (!players.length) {
     list.innerHTML = `<div class="empty-state"><span class="emoji">👤</span>Ei pelaajia.</div>`;
     return;
