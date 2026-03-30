@@ -722,17 +722,34 @@
         <span class="range-val" id="newLevelDisp">70%</span>
       </div>
     </div>
+    <div class="form-group">
+      <label class="form-label">Pelinäkemys: <span id="newVisionVal">70</span>%</label>
+      <div class="range-wrap">
+        <input type="range" id="newVision" min="0" max="100" value="70" step="10"
+          oninput="document.getElementById('newVisionVal').textContent=this.value">
+        <span class="range-val" id="newVisionDisp">70%</span>
+      </div>
+    </div>
     <button class="add-btn" onclick="addPlayer()">✓ Lisää pelaaja</button>
   </div>
 
   <div class="section-label">Asetukset</div>
-  <div class="manage-card" style="margin-bottom:12px;">
+  <div class="manage-card" style="margin-bottom:6px;">
     <div class="active-toggle" style="padding:10px 12px;">
       <label class="toggle">
         <input type="checkbox" id="showPercentsToggle" onchange="toggleShowPercents()">
         <div class="toggle-slider"></div>
       </label>
       <span class="toggle-label" id="showPercentsLabel">Näytä prosentit: Ei</span>
+    </div>
+  </div>
+  <div class="manage-card" style="margin-bottom:12px;">
+    <div class="active-toggle" style="padding:10px 12px;">
+      <label class="toggle">
+        <input type="checkbox" id="useVisionToggle" onchange="toggleUseVision()">
+        <div class="toggle-slider"></div>
+      </label>
+      <span class="toggle-label" id="useVisionLabel">Pelinäkemys jaoissa: Ei</span>
     </div>
   </div>
 
@@ -769,6 +786,14 @@
         <span class="range-val" id="editLevelDisp"></span>
       </div>
     </div>
+    <div class="form-group">
+      <label class="form-label">Pelinäkemys: <span id="editVisionVal">70</span>%</label>
+      <div class="range-wrap">
+        <input type="range" id="editVision" min="0" max="100" value="70" step="10"
+          oninput="document.getElementById('editVisionVal').textContent=this.value">
+        <span class="range-val" id="editVisionDisp"></span>
+      </div>
+    </div>
     <div class="modal-btns">
       <button class="modal-cancel" onclick="closeModal()">Peruuta</button>
       <button class="modal-save" onclick="saveEdit()">Tallenna</button>
@@ -782,45 +807,45 @@ const POS_SHORT = { D: 'PUO', M: 'KK', F: 'HYÖ' };
 
 function getDefaultPlayers() {
     return [
-        { id: 1, name: 'Apa', pos: 'M', level: 100, active: true, present: false },
-        { id: 2, name: 'Ari', pos: 'F', level: 100, active: true, present: false },
-        { id: 3, name: 'Aku', pos: 'M', level: 100, active: true, present: false },
-        { id: 4, name: 'Arto', pos: 'M', level: 100, active: true, present: false },
-        { id: 5, name: 'Charlie', pos: 'F', level: 70, active: true, present: false },
-        { id: 6, name: 'Eero', pos: 'M', level: 100, active: true, present: false },
-        { id: 7, name: 'Ilpo', pos: 'M', level: 100, active: true, present: false },
-        { id: 8, name: 'Esko H.', pos: 'D', level: 80, active: true, present: false },
-        { id: 9, name: 'H-P', pos: 'M', level: 100, active: true, present: false },
-        { id: 10, name: 'Hanski M.', pos: 'D', level: 100, active: true, present: false },
-        { id: 11, name: 'Harry', pos: 'M', level: 70, active: true, present: false },
-        { id: 12, name: 'Heikki H.', pos: 'M', level: 90, active: true, present: false },
-        { id: 13, name: 'Ilkka J.', pos: 'M', level: 80, active: false, present: false },
-        { id: 14, name: 'Ilkka M.', pos: 'M', level: 80, active: true, present: false },
-        { id: 15, name: 'Jouni K.', pos: 'D', level: 80, active: true, present: false },
-        { id: 16, name: 'Suiho', pos: 'M', level: 80, active: true, present: false },
-        { id: 17, name: 'Jussi H.', pos: 'M', level: 80, active: true, present: false },
-        { id: 18, name: 'Mikko E.', pos: 'M', level: 90, active: true, present: false },
-        { id: 19, name: 'Ralla', pos: 'M', level: 80, active: true, present: false },
-        { id: 20, name: 'Risto P.', pos: 'D', level: 60, active: false, present: false },
-        { id: 21, name: 'Tasi', pos: 'M', level: 70, active: false, present: false },
-        { id: 22, name: 'Timo J.', pos: 'M', level: 100, active: true, present: false },
-        { id: 23, name: 'Jampe', pos: 'D', level: 80, active: true, present: false },
-        { id: 24, name: 'Jokke', pos: 'D', level: 90, active: true, present: false },
-        { id: 25, name: 'Hati', pos: 'M', level: 70, active: true, present: false },
-        { id: 26, name: 'Tero', pos: 'F', level: 60, active: true, present: false },
-        { id: 27, name: 'Matti M.', pos: 'F', level: 50, active: true, present: false },
-        { id: 28, name: 'Hannu S.', pos: 'D', level: 80, active: true, present: false },
-        { id: 29, name: 'Jooa', pos: 'M', level: 100, active: false, present: false },
-        { id: 30, name: 'Juusa', pos: 'M', level: 100, active: false, present: false },
-        { id: 31, name: 'Niki', pos: 'M', level: 100, active: false, present: false },
-        { id: 32, name: 'Luca', pos: 'M', level: 80, active: false, present: false },
-        { id: 33, name: 'Kille', pos: 'F', level: 70, active: true, present: false },
-        { id: 34, name: 'Keijo', pos: 'D', level: 60, active: false, present: false },
-        { id: 35, name: 'Jussi N.', pos: 'D', level: 90, active: false, present: false },
-        { id: 36, name: 'Jouni T.', pos: 'F', level: 70, active: true, present: false },
-        { id: 37, name: 'Markus', pos: 'M', level: 80, active: false, present: false },
-        { id: 38, name: 'Ana', pos: 'M', level: 50, active: false, present: false },
-        { id: 39, name: 'Manlio', pos: 'M', level: 80, active: false, present: false },
+        { id: 1, name: 'Apa', pos: 'M', level: 100, vision: 100, active: true, present: false },
+        { id: 2, name: 'Ari', pos: 'F', level: 100, vision: 60, active: true, present: false },
+        { id: 3, name: 'Aku', pos: 'M', level: 100, vision: 90, active: true, present: false },
+        { id: 4, name: 'Arto', pos: 'M', level: 100, vision: 70, active: true, present: false },
+        { id: 5, name: 'Charlie', pos: 'F', level: 70, vision: 60, active: true, present: false },
+        { id: 6, name: 'Eero', pos: 'M', level: 100, vision: 70, active: true, present: false },
+        { id: 7, name: 'Ilpo', pos: 'M', level: 100, vision: 60, active: true, present: false },
+        { id: 8, name: 'Esko H.', pos: 'D', level: 80, vision: 60, active: true, present: false },
+        { id: 9, name: 'H-P', pos: 'M', level: 100, vision: 100, active: true, present: false },
+        { id: 10, name: 'Hanski M.', pos: 'D', level: 100, vision: 80, active: true, present: false },
+        { id: 11, name: 'Harry', pos: 'M', level: 70, vision: 80, active: true, present: false },
+        { id: 12, name: 'Heikki H.', pos: 'M', level: 90, vision: 100, active: true, present: false },
+        { id: 13, name: 'Ilkka J.', pos: 'M', level: 80, vision: 60, active: false, present: false },
+        { id: 14, name: 'Ilkka M.', pos: 'M', level: 80, vision: 60, active: true, present: false },
+        { id: 15, name: 'Jouni K.', pos: 'D', level: 80, vision: 70, active: true, present: false },
+        { id: 16, name: 'Suiho', pos: 'M', level: 80, vision: 90, active: true, present: false },
+        { id: 17, name: 'Jussi H.', pos: 'M', level: 80, vision: 60, active: true, present: false },
+        { id: 18, name: 'Mikko E.', pos: 'M', level: 90, vision: 90, active: true, present: false },
+        { id: 19, name: 'Ralla', pos: 'M', level: 70, vision: 70, active: true, present: false },
+        { id: 20, name: 'Risto P.', pos: 'D', level: 60, vision: 60, active: false, present: false },
+        { id: 21, name: 'Tasi', pos: 'M', level: 70, vision: 70, active: false, present: false },
+        { id: 22, name: 'Timo J.', pos: 'D', level: 100, vision: 70, active: true, present: false },
+        { id: 23, name: 'Jampe', pos: 'D', level: 80, vision: 80, active: true, present: false },
+        { id: 24, name: 'Jokke', pos: 'D', level: 90, vision: 70, active: true, present: false },
+        { id: 25, name: 'Hati', pos: 'M', level: 70, vision: 70, active: true, present: false },
+        { id: 26, name: 'Tero', pos: 'F', level: 60, vision: 60, active: true, present: false },
+        { id: 27, name: 'Matti M.', pos: 'F', level: 50, vision: 80, active: true, present: false },
+        { id: 28, name: 'Hannu S.', pos: 'D', level: 80, vision: 60, active: true, present: false },
+        { id: 29, name: 'Jooa', pos: 'M', level: 100, vision: 100, active: false, present: false },
+        { id: 30, name: 'Juusa', pos: 'M', level: 100, vision: 100, active: false, present: false },
+        { id: 31, name: 'Niki', pos: 'M', level: 100, vision: 90, active: false, present: false },
+        { id: 32, name: 'Luca', pos: 'M', level: 80, vision: 70, active: false, present: false },
+        { id: 33, name: 'Kille', pos: 'F', level: 70, vision: 70, active: true, present: false },
+        { id: 34, name: 'Keijo', pos: 'D', level: 60, vision: 60, active: false, present: false },
+        { id: 35, name: 'Jussi N.', pos: 'D', level: 90, vision: 70, active: true, present: false },
+        { id: 36, name: 'Jouni T.', pos: 'F', level: 70, vision: 80, active: true, present: false },
+        { id: 37, name: 'Markus', pos: 'M', level: 80, vision: 100, active: false, present: false },
+        { id: 38, name: 'Ana', pos: 'M', level: 50, vision: 70, active: false, present: false },
+        { id: 39, name: 'Manlio', pos: 'M', level: 80, vision: 60, active: false, present: false },
     ];
 }
 
@@ -830,6 +855,7 @@ let nextId = Math.max(...players.map(p => p.id)) + 1;
 let editingId = null;
 let currentTeams = null;
 let showPercents = localStorage.getItem('treenijaot_showpercents') === 'true';
+let useVision = localStorage.getItem('treenijaot_usevision') === 'true';
 
 function save() {
   localStorage.setItem('treenijaot_players', JSON.stringify(players));
@@ -858,12 +884,19 @@ function switchTab(tab) {
       cb.checked = showPercents;
       document.getElementById('showPercentsLabel').textContent = 'Näytä prosentit: ' + (showPercents ? 'Kyllä' : 'Ei');
     }
+    const cv = document.getElementById('useVisionToggle');
+    if (cv) {
+      cv.checked = useVision;
+      document.getElementById('useVisionLabel').textContent = 'Pelinäkemys jaoissa: ' + (useVision ? 'Kyllä' : 'Ei');
+    }
   }
 }
 
 function clearAttendance() {
   players.forEach(p => p.present = false);
   save();
+  currentTeams = null;
+  document.getElementById('teamsResult').innerHTML = '';
   renderAttendance();
 }
 
@@ -908,7 +941,17 @@ function renderAttendance() {
 
 function togglePresent(id) {
   const p = players.find(x => x.id === id);
-  if (p) { p.present = !p.present; save(); renderAttendance(); }
+  if (p) {
+    p.present = !p.present;
+    save();
+    renderAttendance();
+    const present = presentPlayers();
+    if (!currentTeams && present.length >= 2) {
+      currentTeams = balancedSplit([...present]);
+    } else if (currentTeams) {
+      currentTeams = balancedSplit([...present]);
+    }
+  }
 }
 
 function updateBadge() {
@@ -924,8 +967,12 @@ function renderTeamsView() {
   if (currentTeams) renderTeamBoxes(currentTeams);
 }
 
+function playerScore(p) {
+  if (useVision) return Math.round((p.level + (p.vision ?? p.level)) / 2);
+  return p.level;
+}
+
 function balancedSplit(present) {
-  // Process each position group separately, balancing by level within each group
   const groups = { D: [], M: [], F: [] };
   present.forEach(p => groups[p.pos].push(p));
 
@@ -933,10 +980,11 @@ function balancedSplit(present) {
   let sumA = 0, sumB = 0;
 
   ['D', 'M', 'F'].forEach(pos => {
-    const sorted = groups[pos].sort((a, b) => b.level - a.level);
+    const sorted = groups[pos].sort((a, b) => playerScore(b) - playerScore(a));
     sorted.forEach(p => {
-      if (sumA <= sumB) { teamA.push(p); sumA += p.level; }
-      else { teamB.push(p); sumB += p.level; }
+      const score = playerScore(p);
+      if (sumA <= sumB) { teamA.push(p); sumA += score; }
+      else { teamB.push(p); sumB += score; }
     });
   });
 
@@ -951,10 +999,9 @@ function splitTeams() {
 }
 
 function winScore(team) {
-  // Primary: count of 100% midfielders, secondary: count of 100% defenders, tertiary: avg level
-  const fullMids = team.filter(p => p.pos === 'M' && p.level === 100).length;
-  const fullDefs = team.filter(p => p.pos === 'D' && p.level === 100).length;
-  const avg = team.length ? team.reduce((s, p) => s + p.level, 0) / team.length : 0;
+  const fullMids = team.filter(p => p.pos === 'M' && playerScore(p) === 100).length;
+  const fullDefs = team.filter(p => p.pos === 'D' && playerScore(p) === 100).length;
+  const avg = team.length ? team.reduce((s, p) => s + playerScore(p), 0) / team.length : 0;
   return fullMids * 1000 + fullDefs * 100 + avg;
 }
 
@@ -1051,6 +1098,15 @@ function shuffleTeams() {
   renderTeamBoxes(currentTeams);
 }
 
+function toggleUseVision() {
+  useVision = document.getElementById('useVisionToggle').checked;
+  localStorage.setItem('treenijaot_usevision', useVision);
+  document.getElementById('useVisionLabel').textContent = 'Pelinäkemys jaoissa: ' + (useVision ? 'Kyllä' : 'Ei');
+  if (currentTeams) {
+    currentTeams = balancedSplit([...presentPlayers()]);
+  }
+}
+
 function toggleShowPercents() {
   showPercents = document.getElementById('showPercentsToggle').checked;
   localStorage.setItem('treenijaot_showpercents', showPercents);
@@ -1119,11 +1175,14 @@ function addPlayer() {
   if (!name) { document.getElementById('newName').focus(); return; }
   const pos = document.getElementById('newPos').value;
   const level = parseInt(document.getElementById('newLevel').value);
-  players.push({ id: nextId++, name, pos, level, active: true, present: false });
+  const vision = parseInt(document.getElementById('newVision').value);
+  players.push({ id: nextId++, name, pos, level, vision, active: true, present: false });
   save();
   document.getElementById('newName').value = '';
   document.getElementById('newLevel').value = 70;
   document.getElementById('newLevelVal').textContent = '70';
+  document.getElementById('newVision').value = 70;
+  document.getElementById('newVisionVal').textContent = '70';
   renderManage();
 }
 
@@ -1133,6 +1192,12 @@ document.getElementById('newLevel').addEventListener('input', function() {
 });
 document.getElementById('editLevel').addEventListener('input', function() {
   document.getElementById('editLevelDisp').textContent = this.value + '%';
+});
+document.getElementById('newVision').addEventListener('input', function() {
+  document.getElementById('newVisionDisp').textContent = this.value + '%';
+});
+document.getElementById('editVision').addEventListener('input', function() {
+  document.getElementById('editVisionDisp').textContent = this.value + '%';
 });
 
 function openEdit(id) {
@@ -1144,6 +1209,10 @@ function openEdit(id) {
   document.getElementById('editLevel').value = p.level;
   document.getElementById('editLevelVal').textContent = p.level;
   document.getElementById('editLevelDisp').textContent = p.level + '%';
+  const vision = p.vision ?? p.level;
+  document.getElementById('editVision').value = vision;
+  document.getElementById('editVisionVal').textContent = vision;
+  document.getElementById('editVisionDisp').textContent = vision + '%';
   document.getElementById('editModal').classList.add('open');
 }
 
@@ -1160,6 +1229,7 @@ function saveEdit() {
   p.name = name;
   p.pos = document.getElementById('editPos').value;
   p.level = parseInt(document.getElementById('editLevel').value);
+  p.vision = parseInt(document.getElementById('editVision').value);
   save();
   closeModal();
   renderManage();
