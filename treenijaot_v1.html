@@ -1002,7 +1002,7 @@ function winScore(team) {
   const fullMids = team.filter(p => p.pos === 'M' && playerScore(p) === 100).length;
   const fullDefs = team.filter(p => p.pos === 'D' && playerScore(p) === 100).length;
   const avg = team.length ? team.reduce((s, p) => s + playerScore(p), 0) / team.length : 0;
-  return fullMids * 1000 + fullDefs * 100 + avg;
+  return fullMids * 1000 + fullDefs * 200 + avg;
 }
 
 function renderTeamBoxes({ teamA, teamB, sumA, sumB }) {
