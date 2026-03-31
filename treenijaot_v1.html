@@ -70,6 +70,7 @@
     border: 1px solid var(--green);
     border-radius: 20px;
     padding: 4px 10px;
+    white-space: nowrap;
   }
 
   /* NAV TABS */
@@ -281,7 +282,7 @@
     border-radius: 5px;
     margin-bottom: 2px;
   }
-  .team-player-name { flex: 1; }
+  .team-player-name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .move-btn {
     flex-shrink: 0;
     width: 22px; height: 22px;
@@ -690,6 +691,11 @@
     color: var(--text);
     font-weight: 600;
   }
+
+  /* BIG FONT MODE */
+  body.big-font .player-name { font-size: 2rem; }
+  body.big-font .manage-name { font-size: 2rem; }
+  body.big-font .team-player-name { font-size: 1.5rem; }
 </style>
 </head>
 <body>
@@ -787,6 +793,15 @@
         <div class="toggle-slider"></div>
       </label>
       <span class="toggle-label" id="showCommentaryLabel">Näytä avainkohdat: Ei</span>
+    </div>
+  </div>
+  <div class="manage-card" style="margin-bottom:12px;">
+    <div class="active-toggle" style="padding:10px 12px;">
+      <label class="toggle">
+        <input type="checkbox" id="bigFontToggle" onchange="toggleBigFont()">
+        <div class="toggle-slider"></div>
+      </label>
+      <span class="toggle-label" id="bigFontLabel">Isompi kirjainkoko: Ei</span>
     </div>
   </div>
 
@@ -894,6 +909,7 @@ let currentTeams = null;
 let showPercents = localStorage.getItem('treenijaot_showpercents') === 'true';
 let useVision = localStorage.getItem('treenijaot_usevision') === 'true';
 let showCommentary = localStorage.getItem('treenijaot_showcommentary') === 'true';
+let bigFont = localStorage.getItem('treenijaot_bigfont') === 'true';
 
 function save() {
   localStorage.setItem('treenijaot_players', JSON.stringify(players));
@@ -931,6 +947,11 @@ function switchTab(tab) {
     if (cc) {
       cc.checked = showCommentary;
       document.getElementById('showCommentaryLabel').textContent = 'Näytä avainkohdat: ' + (showCommentary ? 'Kyllä' : 'Ei');
+    }
+    const bf = document.getElementById('bigFontToggle');
+    if (bf) {
+      bf.checked = bigFont;
+      document.getElementById('bigFontLabel').textContent = 'Isompi kirjainkoko: ' + (bigFont ? 'Kyllä' : 'Ei');
     }
   }
 }
@@ -1059,7 +1080,7 @@ function generateCommentary(teamA, teamB) {
     const weights = pool.map(p => {
       const s = playerScore(p);
       // 80% chance weight by score, 20% chance flat (gives underdogs a shot)
-      return Math.random() < 0.7 ? s : 50;
+      return Math.random() < 0.8 ? s : 50;
     });
     const total = weights.reduce((a, b) => a + b, 0);
     let r = Math.random() * total;
@@ -1085,7 +1106,6 @@ function generateCommentary(teamA, teamB) {
     `<em>${n}</em>:lla on iso vastuu puolustuksen ja hyökkäyksen linkittämisessä.`,
     `Riittääkö <em>${n}</em>:n kunto?`,
     `Osuvatko <em>${n}</em>:n keskitykset kohdalleen?`,
-    `Malttaako <em>${n}</em> jakaa helppoja syöttöjä?`,
   ];
   const defTemplates = (n) => [
     `Pitääkö <em>${n}</em>:n puolustus?`,
@@ -1101,7 +1121,7 @@ function generateCommentary(teamA, teamB) {
     `Iskeekö <em>${n}</em> juuri oikealla hetkellä?`,
     `Onko <em>${n}</em>:n viimeistely terässä?`,
     `Pystytäänkö <em>${n}</em>:n taitoa käyttämään hyväksi hyökkäyspäässä?`,
-    `Riittääkö <em>${n}</em>:n terävyys maalin edessä?`,
+    `Riittääkö <em>${n}</em>:n terävyys?`,
   ];
   const randomComments = [
     'Onko pallossa oikea paine?',
@@ -1122,9 +1142,9 @@ function generateCommentary(teamA, teamB) {
     { player: 'Suiho', text: 'Vetääkö <em>Suiho</em> kanin hatusta?' },
     { player: 'Suiho', text: 'Potkiiko <em>Suiho</em> taas kaikkea mikä liikkuu jaloille?' },
     { player: 'Suiho', text: 'Pujotteleeko <em>Suiho</em> taas koko kentän läpi näytöstyyliin?' },
-    { player: 'Suiho', text: 'Onko <em>Suiho</em> muistanut venytellä?' },
     { player: 'Ari', text: 'Onko <em>Ari</em> jälleen kerran pitelemätön keskityspalloissa?' },
     { player: 'Kille', text: 'Onko <em>Kille</em>:n pääpeli entisellään?' },
+    { player: 'Matti M.', text: 'Ratkaiseeko <em>Matti M.</em>:n kokemus pelin?' },
   ].filter(c => presentNames.has(c.player));
 
   function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
@@ -1286,6 +1306,13 @@ function toggleUseVision() {
   }
 }
 
+function toggleBigFont() {
+  bigFont = document.getElementById('bigFontToggle').checked;
+  localStorage.setItem('treenijaot_bigfont', bigFont);
+  document.getElementById('bigFontLabel').textContent = 'Isompi kirjainkoko: ' + (bigFont ? 'Kyllä' : 'Ei');
+  document.body.classList.toggle('big-font', bigFont);
+}
+
 function toggleShowCommentary() {
   showCommentary = document.getElementById('showCommentaryToggle').checked;
   localStorage.setItem('treenijaot_showcommentary', showCommentary);
@@ -1436,6 +1463,7 @@ function clearStorage() {
 }
 
 // INIT
+if (bigFont) document.body.classList.add('big-font');
 renderAttendance();
 // sync toggle on first load if manage view is somehow active
 </script>
