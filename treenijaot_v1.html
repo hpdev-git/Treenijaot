@@ -662,6 +662,34 @@
   .prediction-label-a { color: var(--team-a-accent); text-align: left; }
   .prediction-label-b { color: var(--team-b-accent); text-align: right; }
   .prediction-name { font-size: 12px; opacity: 0.8; font-weight: 600; }
+
+  .match-commentary {
+    border-top: 1px solid var(--border);
+    padding: 10px 12px 12px;
+  }
+  .commentary-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 7px;
+  }
+  .commentary-item {
+    font-family: 'Barlow', sans-serif;
+    font-size: 13px;
+    color: var(--text-muted);
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    line-height: 1.4;
+  }
+  .commentary-item:last-child { border-bottom: none; }
+  .commentary-item em {
+    font-style: normal;
+    color: var(--text);
+    font-weight: 600;
+  }
 </style>
 </head>
 <body>
@@ -743,13 +771,22 @@
       <span class="toggle-label" id="showPercentsLabel">Näytä prosentit: Ei</span>
     </div>
   </div>
-  <div class="manage-card" style="margin-bottom:12px;">
+  <div class="manage-card" style="margin-bottom:6px;">
     <div class="active-toggle" style="padding:10px 12px;">
       <label class="toggle">
         <input type="checkbox" id="useVisionToggle" onchange="toggleUseVision()">
         <div class="toggle-slider"></div>
       </label>
       <span class="toggle-label" id="useVisionLabel">Pelinäkemys jaoissa: Ei</span>
+    </div>
+  </div>
+  <div class="manage-card" style="margin-bottom:12px;">
+    <div class="active-toggle" style="padding:10px 12px;">
+      <label class="toggle">
+        <input type="checkbox" id="showCommentaryToggle" onchange="toggleShowCommentary()">
+        <div class="toggle-slider"></div>
+      </label>
+      <span class="toggle-label" id="showCommentaryLabel">Näytä avainkohdat: Ei</span>
     </div>
   </div>
 
@@ -856,6 +893,7 @@ let editingId = null;
 let currentTeams = null;
 let showPercents = localStorage.getItem('treenijaot_showpercents') === 'true';
 let useVision = localStorage.getItem('treenijaot_usevision') === 'true';
+let showCommentary = localStorage.getItem('treenijaot_showcommentary') === 'true';
 
 function save() {
   localStorage.setItem('treenijaot_players', JSON.stringify(players));
@@ -888,6 +926,11 @@ function switchTab(tab) {
     if (cv) {
       cv.checked = useVision;
       document.getElementById('useVisionLabel').textContent = 'Pelinäkemys jaoissa: ' + (useVision ? 'Kyllä' : 'Ei');
+    }
+    const cc = document.getElementById('showCommentaryToggle');
+    if (cc) {
+      cc.checked = showCommentary;
+      document.getElementById('showCommentaryLabel').textContent = 'Näytä avainkohdat: ' + (showCommentary ? 'Kyllä' : 'Ei');
     }
   }
 }
@@ -998,11 +1041,141 @@ function splitTeams() {
   renderTeamBoxes(currentTeams);
 }
 
-function winScore(team) {
-  const fullMids = team.filter(p => p.pos === 'M' && playerScore(p) === 100).length;
-  const fullDefs = team.filter(p => p.pos === 'D' && playerScore(p) === 100).length;
-  const avg = team.length ? team.reduce((s, p) => s + playerScore(p), 0) / team.length : 0;
-  return fullMids * 1000 + fullDefs * 200 + avg;
+function winScore(team, otherTeam) {
+  if (!team.length) return 0;
+  const fullMids = team.filter(p => p.pos === 'M' && playerScore(p) === 100).length / team.length;
+  const fullDefs = team.filter(p => p.pos === 'D' && playerScore(p) === 100).length / team.length;
+  const avg = team.reduce((s, p) => s + playerScore(p), 0) / team.length;
+  const sizeDiff = Math.max(0, team.length - otherTeam.length);
+  return fullMids * 1000 + fullDefs * 200 + avg + sizeDiff * 100;
+}
+
+function generateCommentary(teamA, teamB) {
+  const allPlayers = [...teamA, ...teamB];
+
+  // Weighted random pick: higher playerScore = more likely, but lower scores get occasional pick too
+  function weightedPick(pool) {
+    if (!pool.length) return null;
+    const weights = pool.map(p => {
+      const s = playerScore(p);
+      // 80% chance weight by score, 20% chance flat (gives underdogs a shot)
+      return Math.random() < 0.7 ? s : 50;
+    });
+    const total = weights.reduce((a, b) => a + b, 0);
+    let r = Math.random() * total;
+    for (let i = 0; i < pool.length; i++) {
+      r -= weights[i];
+      if (r <= 0) return pool[i];
+    }
+    return pool[pool.length - 1];
+  }
+
+  const mids = allPlayers.filter(p => p.pos === 'M');
+  const defs = allPlayers.filter(p => p.pos === 'D');
+  const fwds = allPlayers.filter(p => p.pos === 'F');
+
+  const midTemplates = (n) => [
+    `Riittääkö <em>${n}</em>:n pelinrakennustaito?`,
+    `Hallitseeko <em>${n}</em> keskikentän tänään?`,
+    `Onko <em>${n}</em>:n syöttöpeli terävää?`,
+    `Kuinka paljon <em>${n}</em> vaikuttaa pelin tempoon?`,
+    `Nähdäänkö <em>${n}</em>:lta yllättävä kaukolaukaus?`,
+    `Osuvatko <em>${n}</em>:n syötöt kohdalleen?`,
+    `Osaako <em>${n}</em> jakaa palloa eteenpäin?`,
+    `<em>${n}</em>:lla on iso vastuu puolustuksen ja hyökkäyksen linkittämisessä.`,
+    `Riittääkö <em>${n}</em>:n kunto?`,
+    `Osuvatko <em>${n}</em>:n keskitykset kohdalleen?`,
+    `Malttaako <em>${n}</em> jakaa helppoja syöttöjä?`,
+  ];
+  const defTemplates = (n) => [
+    `Pitääkö <em>${n}</em>:n puolustus?`,
+    `Onko <em>${n}</em> mies paikallaan kun vastustaja iskee?`,
+    `Kuinka tiukka on <em>${n}</em>:n taklaus tänään?`,
+    `Kestääkö <em>${n}</em>:n selkäranka paineen alla?`,
+    `Onko <em>${n}</em> maaliviivalla taas kerran kuin muuri?`,
+    `Onnistuuko <em>${n}</em> käynnistämään hyökkäykset alhaalta?`,
+  ];
+  const fwdTemplates = (n) => [
+    `Onko <em>${n}</em>:n maalijyvä kohdallaan?`,
+    `Löytääkö <em>${n}</em> tilaa puolustuksen selustasta?`,
+    `Iskeekö <em>${n}</em> juuri oikealla hetkellä?`,
+    `Onko <em>${n}</em>:n viimeistely terässä?`,
+    `Pystytäänkö <em>${n}</em>:n taitoa käyttämään hyväksi hyökkäyspäässä?`,
+    `Riittääkö <em>${n}</em>:n terävyys maalin edessä?`,
+  ];
+  const randomComments = [
+    'Onko pallossa oikea paine?',
+    'Onko liivit pesty?',
+    'Kumpi joukkue osaa pelata vahvuuksillaan?',
+    'Kumpi joukkue löytää rytminsä nopeammin?',
+    'Kuka tarjoaa kahvit Hakasella?',
+    'Paras joukkue ei aina voita — mutta lähes aina.',
+    'Noudattavatko molemmat joukkueet pelisuunnitelmaansa?',
+  ];
+
+  // Player-specific comments — only shown if that player is present
+  const presentNames = new Set(presentPlayers().map(p => p.name));
+  const playerSpecificComments = [
+    { player: 'Apa', text: 'Keksiikö <em>Apa</em> omia sääntöjään?' },
+    { player: 'Apa', text: 'Yrittääkö <em>Apa</em> maalia puolesta kentästä?' },
+    { player: 'Hanski M.', text: 'Seisooko <em>Hanski M.</em> taas muurina maaliviivalla?' },
+    { player: 'Suiho', text: 'Vetääkö <em>Suiho</em> kanin hatusta?' },
+    { player: 'Suiho', text: 'Potkiiko <em>Suiho</em> taas kaikkea mikä liikkuu jaloille?' },
+    { player: 'Suiho', text: 'Pujotteleeko <em>Suiho</em> taas koko kentän läpi näytöstyyliin?' },
+    { player: 'Suiho', text: 'Onko <em>Suiho</em> muistanut venytellä?' },
+    { player: 'Ari', text: 'Onko <em>Ari</em> jälleen kerran pitelemätön keskityspalloissa?' },
+    { player: 'Kille', text: 'Onko <em>Kille</em>:n pääpeli entisellään?' },
+  ].filter(c => presentNames.has(c.player));
+
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+  const lines = [];
+  const used = new Set();
+
+  function addPlayerLine(pool, templates) {
+    if (!pool.length) return false;
+    let attempts = 0;
+    while (attempts++ < 10) {
+      const p = weightedPick(pool);
+      if (!used.has(p.id)) {
+        used.add(p.id);
+        lines.push(pick(templates(p.name)));
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function addSpecificComment() {
+    if (!playerSpecificComments.length) return false;
+    const c = playerSpecificComments[Math.floor(Math.random() * playerSpecificComments.length)];
+    lines.push(c.text);
+    return true;
+  }
+
+  // Build 3 lines: mix of player comments, specific comments and random quips
+  // ~40% chance to include a player-specific comment if any are available
+  const useSpecific = playerSpecificComments.length > 0 && Math.random() < 0.4;
+
+  const slots = [
+    () => addPlayerLine(mids.length ? mids : allPlayers, midTemplates),
+    () => addPlayerLine(fwds.length ? fwds : allPlayers, fwdTemplates),
+    () => addPlayerLine(defs.length ? defs : allPlayers, defTemplates),
+    () => { lines.push(pick(randomComments)); return true; },
+    () => addSpecificComment(),
+  ];
+
+  // Shuffle slot order, always include at least one random or specific comment
+  const order = useSpecific
+    ? [slots[0], slots[4], slots[Math.random() < 0.5 ? 1 : 3]]
+    : (Math.random() < 0.5 ? [slots[0], slots[3], slots[1]] : [slots[1], slots[0], slots[3]]);
+
+  order.forEach(fn => fn());
+
+  // Pad to 3 if needed
+  while (lines.length < 3) lines.push(pick(randomComments));
+
+  return lines.slice(0, 3);
 }
 
 function renderTeamBoxes({ teamA, teamB, sumA, sumB }) {
@@ -1023,10 +1196,12 @@ function renderTeamBoxes({ teamA, teamB, sumA, sumB }) {
     </div>`;
   };
 
-  const sA = winScore(teamA), sB = winScore(teamB);
+  const sA = winScore(teamA, teamB), sB = winScore(teamB, teamA);
   const total = sA + sB || 1;
   const pctA = Math.round(sA / total * 100);
   const pctB = 100 - pctA;
+
+  const commentary = generateCommentary(teamA, teamB);
 
   document.getElementById('teamsResult').innerHTML = `
     <div class="teams-grid">
@@ -1065,6 +1240,10 @@ function renderTeamBoxes({ teamA, teamB, sumA, sumB }) {
           <span class="prediction-name">Liivilliset</span>
         </div>
       </div>
+      ${showCommentary ? `<div class="match-commentary">
+        <div class="commentary-title">🎙 Avainkohtia</div>
+        ${commentary.map(c => `<div class="commentary-item">${c}</div>`).join('')}
+      </div>` : ''}
     </div>
     <button class="shuffle-btn" onclick="shuffleTeams()">🔀 Sekoita uudelleen</button>
   `;
@@ -1103,8 +1282,15 @@ function toggleUseVision() {
   localStorage.setItem('treenijaot_usevision', useVision);
   document.getElementById('useVisionLabel').textContent = 'Pelinäkemys jaoissa: ' + (useVision ? 'Kyllä' : 'Ei');
   if (currentTeams) {
-    currentTeams = balancedSplit([...presentPlayers()]);
+    renderTeamBoxes(currentTeams);
   }
+}
+
+function toggleShowCommentary() {
+  showCommentary = document.getElementById('showCommentaryToggle').checked;
+  localStorage.setItem('treenijaot_showcommentary', showCommentary);
+  document.getElementById('showCommentaryLabel').textContent = 'Näytä avainkohdat: ' + (showCommentary ? 'Kyllä' : 'Ei');
+  if (currentTeams) renderTeamBoxes(currentTeams);
 }
 
 function toggleShowPercents() {
