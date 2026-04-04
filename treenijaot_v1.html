@@ -1078,7 +1078,7 @@ function winScore(team, otherTeam) {
   const fullDefs = team.filter(p => p.pos === 'D' && playerScore(p) === 100).length / team.length;
   const avg = team.reduce((s, p) => s + playerScore(p), 0) / team.length;
   const sizeDiff = Math.max(0, team.length - otherTeam.length);
-  return fullMids * 300 + fullDefs * 300 + avg + sizeDiff * 200;
+  return fullMids * 300 + fullDefs * 300 + avg + sizeDiff * 100;
 }
 
 function generateCommentary(teamA, teamB) {
