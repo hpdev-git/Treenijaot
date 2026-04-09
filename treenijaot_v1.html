@@ -698,6 +698,7 @@
   body.big-font .player-name { font-size: 2rem; }
   body.big-font .manage-name { font-size: 2rem; }
   body.big-font .team-player-name { font-size: 1.5rem; }
+  body.big-font .toggle-label { font-size: 1rem; }
 </style>
 </head>
 <body>
@@ -865,139 +866,139 @@
 </div>
 
 <script>
-    const POS_PLURAL = { D: 'Puolustajat', M: 'Keskikentät', F: 'Hyökkääjät' };
-    const POS_SHORT = { D: 'PUO', M: 'KK', F: 'HYÖ' };
+const POS_PLURAL = { D: 'Puolustajat', M: 'Keskikentät', F: 'Hyökkääjät' };
+const POS_SHORT = { D: 'PUO', M: 'KK', F: 'HYÖ' };
 
-    function getDefaultPlayers() {
-        return [
-            { id: 1, name: 'Apa', pos: 'M', level: 70, vision: 100, active: true, present: false },
-            { id: 2, name: 'Ari', pos: 'F', level: 80, vision: 50, active: true, present: false },
-            { id: 3, name: 'Aku', pos: 'M', level: 80, vision: 90, active: true, present: false },
-            { id: 4, name: 'Arto', pos: 'M', level: 90, vision: 60, active: true, present: false },
-            { id: 5, name: 'Charlie', pos: 'F', level: 30, vision: 50, active: true, present: false },
-            { id: 6, name: 'Eero', pos: 'M', level: 90, vision: 70, active: true, present: false },
-            { id: 7, name: 'Ilpo', pos: 'M', level: 100, vision: 60, active: true, present: false },
-            { id: 8, name: 'Esko H.', pos: 'D', level: 60, vision: 50, active: true, present: false },
-            { id: 9, name: 'H-P', pos: 'M', level: 100, vision: 100, active: true, present: false },
-            { id: 10, name: 'Hanski M.', pos: 'D', level: 90, vision: 90, active: true, present: false },
-            { id: 11, name: 'Harry', pos: 'M', level: 40, vision: 80, active: true, present: false },
-            { id: 12, name: 'Heikki H.', pos: 'M', level: 40, vision: 100, active: true, present: false },
-            { id: 13, name: 'Ilkka J.', pos: 'M', level: 70, vision: 50, active: false, present: false },
-            { id: 14, name: 'Ilkka M.', pos: 'M', level: 60, vision: 60, active: true, present: false },
-            { id: 15, name: 'Jouni K.', pos: 'D', level: 60, vision: 60, active: true, present: false },
-            { id: 16, name: 'Suiho', pos: 'M', level: 30, vision: 100, active: true, present: false },
-            { id: 17, name: 'Jussi H.', pos: 'M', level: 60, vision: 50, active: true, present: false },
-            { id: 18, name: 'Mikko E.', pos: 'M', level: 70, vision: 90, active: true, present: false },
-            { id: 19, name: 'Ralla', pos: 'D', level: 40, vision: 70, active: true, present: false },
-            { id: 20, name: 'Risto P.', pos: 'D', level: 10, vision: 30, active: false, present: false },
-            { id: 21, name: 'Tasi', pos: 'M', level: 60, vision: 50, active: false, present: false },
-            { id: 22, name: 'Timo J.', pos: 'D', level: 80, vision: 80, active: true, present: false },
-            { id: 23, name: 'Jampe', pos: 'D', level: 60, vision: 70, active: true, present: false },
-            { id: 24, name: 'Jokke', pos: 'D', level: 80, vision: 50, active: true, present: false },
-            { id: 25, name: 'Hati', pos: 'M', level: 40, vision: 60, active: true, present: false },
-            { id: 26, name: 'Tero', pos: 'F', level: 10, vision: 30, active: true, present: false },
-            { id: 27, name: 'Matti M.', pos: 'F', level: 10, vision: 70, active: true, present: false },
-            { id: 28, name: 'Hannu S.', pos: 'D', level: 50, vision: 50, active: true, present: false },
-            { id: 29, name: 'Jooa', pos: 'M', level: 100, vision: 100, active: false, present: false },
-            { id: 30, name: 'Juusa', pos: 'M', level: 100, vision: 100, active: false, present: false },
-            { id: 31, name: 'Niki', pos: 'M', level: 100, vision: 80, active: false, present: false },
-            { id: 32, name: 'Luca', pos: 'M', level: 60, vision: 70, active: false, present: false },
-            { id: 33, name: 'Kille', pos: 'F', level: 20, vision: 50, active: true, present: false },
-            { id: 34, name: 'Keijo', pos: 'D', level: 10, vision: 30, active: false, present: false },
-            { id: 35, name: 'Jussi N.', pos: 'D', level: 80, vision: 60, active: true, present: false },
-            { id: 36, name: 'Jouni T.', pos: 'F', level: 40, vision: 80, active: true, present: false },
-            { id: 37, name: 'Markus', pos: 'M', level: 50, vision: 100, active: false, present: false },
-            { id: 38, name: 'Ana', pos: 'M', level: 10, vision: 70, active: false, present: false },
-            { id: 39, name: 'Manlio', pos: 'M', level: 70, vision: 30, active: false, present: false },
-        ];
+function getDefaultPlayers() {
+    return [
+        { id: 1, name: 'Apa', pos: 'M', level: 80, vision: 100, active: true, present: false },
+        { id: 2, name: 'Ari', pos: 'F', level: 80, vision: 50, active: true, present: false },
+        { id: 3, name: 'Aku', pos: 'M', level: 80, vision: 90, active: true, present: false },
+        { id: 4, name: 'Arto', pos: 'M', level: 100, vision: 60, active: true, present: false },
+        { id: 5, name: 'Charlie', pos: 'F', level: 40, vision: 50, active: true, present: false },
+        { id: 6, name: 'Eero', pos: 'M', level: 100, vision: 70, active: true, present: false },
+        { id: 7, name: 'Ilpo', pos: 'M', level: 100, vision: 60, active: true, present: false },
+        { id: 8, name: 'Esko H.', pos: 'D', level: 60, vision: 50, active: true, present: false },
+        { id: 9, name: 'H-P', pos: 'M', level: 100, vision: 100, active: true, present: false },
+        { id: 10, name: 'Hanski M.', pos: 'D', level: 100, vision: 90, active: true, present: false },
+        { id: 11, name: 'Harry', pos: 'M', level: 40, vision: 80, active: true, present: false },
+        { id: 12, name: 'Heikki H.', pos: 'M', level: 40, vision: 100, active: true, present: false },
+        { id: 13, name: 'Ilkka J.', pos: 'M', level: 70, vision: 50, active: false, present: false },
+        { id: 14, name: 'Ilkka M.', pos: 'M', level: 60, vision: 60, active: true, present: false },
+        { id: 15, name: 'Jouni K.', pos: 'D', level: 60, vision: 60, active: true, present: false },
+        { id: 16, name: 'Suiho', pos: 'M', level: 40, vision: 100, active: true, present: false },
+        { id: 17, name: 'Jussi H.', pos: 'M', level: 60, vision: 50, active: true, present: false },
+        { id: 18, name: 'Mikko E.', pos: 'M', level: 70, vision: 90, active: true, present: false },
+        { id: 19, name: 'Ralla', pos: 'D', level: 40, vision: 70, active: true, present: false },
+        { id: 20, name: 'Risto P.', pos: 'D', level: 20, vision: 30, active: false, present: false },
+        { id: 21, name: 'Tasi', pos: 'M', level: 70, vision: 50, active: false, present: false },
+        { id: 22, name: 'Timo J.', pos: 'D', level: 90, vision: 80, active: true, present: false },
+        { id: 23, name: 'Jampe', pos: 'D', level: 60, vision: 70, active: true, present: false },
+        { id: 24, name: 'Jokke', pos: 'D', level: 80, vision: 50, active: true, present: false },
+        { id: 25, name: 'Hati', pos: 'M', level: 40, vision: 60, active: true, present: false },
+        { id: 26, name: 'Tero', pos: 'F', level: 30, vision: 30, active: true, present: false },
+        { id: 27, name: 'Matti M.', pos: 'F', level: 20, vision: 70, active: true, present: false },
+        { id: 28, name: 'Hannu S.', pos: 'D', level: 50, vision: 50, active: true, present: false },
+        { id: 29, name: 'Jooa', pos: 'M', level: 100, vision: 100, active: false, present: false },
+        { id: 30, name: 'Juusa', pos: 'M', level: 100, vision: 100, active: false, present: false },
+        { id: 31, name: 'Niki', pos: 'M', level: 100, vision: 80, active: false, present: false },
+        { id: 32, name: 'Luca', pos: 'M', level: 70, vision: 70, active: false, present: false },
+        { id: 33, name: 'Kille', pos: 'F', level: 30, vision: 50, active: true, present: false },
+        { id: 34, name: 'Keijo', pos: 'D', level: 20, vision: 30, active: false, present: false },
+        { id: 35, name: 'Jussi N.', pos: 'D', level: 90, vision: 60, active: true, present: false },
+        { id: 36, name: 'Jouni T.', pos: 'F', level: 50, vision: 80, active: true, present: false },
+        { id: 37, name: 'Markus', pos: 'M', level: 50, vision: 100, active: false, present: false },
+        { id: 38, name: 'Ana', pos: 'M', level: 10, vision: 70, active: false, present: false },
+        { id: 39, name: 'Manlio', pos: 'M', level: 70, vision: 30, active: false, present: false },
+    ];
+}
+
+let players = JSON.parse(localStorage.getItem('treenijaot_players') || 'null') || getDefaultPlayers();
+
+let nextId = Math.max(...players.map(p => p.id)) + 1;
+let editingId = null;
+let currentTeams = null;
+let vestedPlayers = new Set();
+let showPercents = localStorage.getItem('treenijaot_showpercents') === 'true';
+let useVision = localStorage.getItem('treenijaot_usevision') === 'true';
+let prioritizeMovement = localStorage.getItem('treenijaot_priomove') === 'true';
+let showCommentary = localStorage.getItem('treenijaot_showcommentary') === 'true';
+let bigFont = localStorage.getItem('treenijaot_bigfont') === 'true';
+let showDebug = localStorage.getItem('treenijaot_showdebug') === 'true';
+
+function save() {
+  localStorage.setItem('treenijaot_players', JSON.stringify(players));
+}
+
+function activePlayers() {
+  return players.filter(p => p.active);
+}
+
+function presentPlayers() {
+  return players.filter(p => p.active && p.present);
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', ['attendance','teams','manage'][i] === tab);
+  });
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + tab).classList.add('active');
+  if (tab === 'attendance') renderAttendance();
+  if (tab === 'teams') renderTeamsView();
+  if (tab === 'manage') renderManage();
+  if (tab === 'manage') {
+    const cv = document.getElementById('useVisionToggle');
+    if (cv) {
+      cv.checked = useVision;
+      document.getElementById('useVisionLabel').textContent = 'Pelinäkemys jaoissa: ' + (useVision ? 'Kyllä' : 'Ei');
     }
-
-    let players = JSON.parse(localStorage.getItem('treenijaot_players') || 'null') || getDefaultPlayers();
-
-    let nextId = Math.max(...players.map(p => p.id)) + 1;
-    let editingId = null;
-    let currentTeams = null;
-    let vestedPlayers = new Set();
-    let showPercents = localStorage.getItem('treenijaot_showpercents') === 'true';
-    let useVision = localStorage.getItem('treenijaot_usevision') === 'true';
-    let prioritizeMovement = localStorage.getItem('treenijaot_priomove') === 'true';
-    let showCommentary = localStorage.getItem('treenijaot_showcommentary') === 'true';
-    let bigFont = localStorage.getItem('treenijaot_bigfont') === 'true';
-    let showDebug = localStorage.getItem('treenijaot_showdebug') === 'true';
-
-    function save() {
-        localStorage.setItem('treenijaot_players', JSON.stringify(players));
+    const pm = document.getElementById('prioritizeMovementToggle');
+    if (pm) {
+      pm.checked = prioritizeMovement;
+      document.getElementById('prioritizeMovementLabel').textContent = 'Painota jaoissa liikettä: ' + (prioritizeMovement ? 'Kyllä' : 'Ei');
     }
-
-    function activePlayers() {
-        return players.filter(p => p.active);
+    const cc = document.getElementById('showCommentaryToggle');
+    if (cc) {
+      cc.checked = showCommentary;
+      document.getElementById('showCommentaryLabel').textContent = 'Näytä avainkohdat: ' + (showCommentary ? 'Kyllä' : 'Ei');
     }
-
-    function presentPlayers() {
-        return players.filter(p => p.active && p.present);
+    const bf = document.getElementById('bigFontToggle');
+    if (bf) {
+      bf.checked = bigFont;
+      document.getElementById('bigFontLabel').textContent = 'Isompi kirjainkoko: ' + (bigFont ? 'Kyllä' : 'Ei');
     }
-
-    function switchTab(tab) {
-        document.querySelectorAll('.tab').forEach((t, i) => {
-            t.classList.toggle('active', ['attendance', 'teams', 'manage'][i] === tab);
-        });
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.getElementById('view-' + tab).classList.add('active');
-        if (tab === 'attendance') renderAttendance();
-        if (tab === 'teams') renderTeamsView();
-        if (tab === 'manage') renderManage();
-        if (tab === 'manage') {
-            const cv = document.getElementById('useVisionToggle');
-            if (cv) {
-                cv.checked = useVision;
-                document.getElementById('useVisionLabel').textContent = 'Pelinäkemys jaoissa: ' + (useVision ? 'Kyllä' : 'Ei');
-            }
-            const pm = document.getElementById('prioritizeMovementToggle');
-            if (pm) {
-                pm.checked = prioritizeMovement;
-                document.getElementById('prioritizeMovementLabel').textContent = 'Painota jaoissa liikettä: ' + (prioritizeMovement ? 'Kyllä' : 'Ei');
-            }
-            const cc = document.getElementById('showCommentaryToggle');
-            if (cc) {
-                cc.checked = showCommentary;
-                document.getElementById('showCommentaryLabel').textContent = 'Näytä avainkohdat: ' + (showCommentary ? 'Kyllä' : 'Ei');
-            }
-            const bf = document.getElementById('bigFontToggle');
-            if (bf) {
-                bf.checked = bigFont;
-                document.getElementById('bigFontLabel').textContent = 'Isompi kirjainkoko: ' + (bigFont ? 'Kyllä' : 'Ei');
-            }
-            const sd = document.getElementById('showDebugToggle');
-            if (sd) {
-                sd.checked = showDebug;
-                document.getElementById('showDebugLabel').textContent = 'Näytä debug-arvot: ' + (showDebug ? 'Kyllä' : 'Ei');
-            }
-        }
+    const sd = document.getElementById('showDebugToggle');
+    if (sd) {
+      sd.checked = showDebug;
+      document.getElementById('showDebugLabel').textContent = 'Näytä debug-arvot: ' + (showDebug ? 'Kyllä' : 'Ei');
     }
+  }
+}
 
-    function clearAttendance() {
-        players.forEach(p => p.present = false);
-        save();
-        currentTeams = null;
-        document.getElementById('teamsResult').innerHTML = '';
-        renderAttendance();
-    }
+function clearAttendance() {
+  players.forEach(p => p.present = false);
+  save();
+  currentTeams = null;
+  document.getElementById('teamsResult').innerHTML = '';
+  renderAttendance();
+}
 
-    // --- ATTENDANCE ---
-    function renderAttendance() {
-        const list = document.getElementById('attendanceList');
-        const active = activePlayers();
+// --- ATTENDANCE ---
+function renderAttendance() {
+  const list = document.getElementById('attendanceList');
+  const active = activePlayers();
+  
+  const groups = { D: [], M: [], F: [] };
+  active.forEach(p => groups[p.pos].push(p));
 
-        const groups = { D: [], M: [], F: [] };
-        active.forEach(p => groups[p.pos].push(p));
-
-        const posOrder = ['D', 'M', 'F'];
-        let html = '';
-        posOrder.forEach(pos => {
-            if (!groups[pos].length) return;
-            html += `<div class="section-label">${POS_PLURAL[pos]}</div>`;
-            groups[pos].forEach(p => {
-                html += `
+  const posOrder = ['D', 'M', 'F'];
+  let html = '';
+  posOrder.forEach(pos => {
+    if (!groups[pos].length) return;
+    html += `<div class="section-label">${POS_PLURAL[pos]}</div>`;
+    groups[pos].forEach(p => {
+      html += `
         <div class="player-card${p.present ? ' present' : ''}" onclick="togglePresent(${p.id})">
           <div class="check-circle">${p.present ? '✓' : ''}</div>
           <div class="player-info">
@@ -1007,278 +1008,280 @@
             </div>
           </div>
         </div>`;
-            });
-        });
+    });
+  });
 
-        if (!active.length) {
-            html = `<div class="empty-state"><span class="emoji">👥</span>Ei aktiivisia pelaajia.<br>Lisää pelaajia Hallinta-välilehdellä.</div>`;
-        }
+  if (!active.length) {
+    html = `<div class="empty-state"><span class="emoji">👥</span>Ei aktiivisia pelaajia.<br>Lisää pelaajia Hallinta-välilehdellä.</div>`;
+  }
 
-        list.innerHTML = html;
-        updateBadge();
+  list.innerHTML = html;
+  updateBadge();
+}
+
+function togglePresent(id) {
+  const p = players.find(x => x.id === id);
+  if (p) {
+    p.present = !p.present;
+    save();
+    renderAttendance();
+    const present = presentPlayers();
+    if (!currentTeams && present.length >= 2) {
+      currentTeams = balancedSplit([...present]);
+    } else if (currentTeams) {
+      currentTeams = balancedSplit([...present]);
     }
+  }
+}
 
-    function togglePresent(id) {
-        const p = players.find(x => x.id === id);
-        if (p) {
-            p.present = !p.present;
-            save();
-            renderAttendance();
-            const present = presentPlayers();
-            if (!currentTeams && present.length >= 2) {
-                currentTeams = balancedSplit([...present]);
-            } else if (currentTeams) {
-                currentTeams = balancedSplit([...present]);
-            }
-        }
+function updateBadge() {
+  const n = presentPlayers().length;
+  document.getElementById('presentBadge').textContent = n + ' paikalla';
+}
+
+// --- TEAMS ---
+function renderTeamsView() {
+  const present = presentPlayers();
+  document.getElementById('teamsPresent').textContent = present.length + ' pelaajaa';
+  document.getElementById('splitBtn').disabled = present.length < 2;
+  if (currentTeams) renderTeamBoxes(currentTeams);
+}
+
+function playerScore(p) {
+  if (!useVision) return p.level;
+  const v = p.vision ?? p.level;
+  return prioritizeMovement
+    ? Math.round(0.8 * p.level + 0.2 * v)
+    : Math.round(0.4 * p.level + 0.6 * v);
+}
+
+function balancedSplit(present) {
+  const groups = { D: [], M: [], F: [] };
+  present.forEach(p => groups[p.pos].push(p));
+
+  let teamA = [], teamB = [];
+  let sumA = 0, sumB = 0;
+
+  ['D', 'M', 'F'].forEach(pos => {
+    const sorted = groups[pos].sort((a, b) => playerScore(b) - playerScore(a));
+    sorted.forEach(p => {
+      const score = playerScore(p);
+      if (sumA <= sumB) { teamA.push(p); sumA += score; }
+      else { teamB.push(p); sumB += score; }
+    });
+  });
+
+  return { teamA, teamB, sumA, sumB };
+}
+
+function toggleVest(id) {
+  if (vestedPlayers.has(id)) vestedPlayers.delete(id);
+  else vestedPlayers.add(id);
+  renderTeamBoxes(currentTeams);
+}
+
+function splitTeams() {
+  const present = presentPlayers();
+  if (present.length < 2) return;
+  vestedPlayers = new Set();
+  currentTeams = balancedSplit([...present]);
+  renderTeamBoxes(currentTeams);
+}
+
+function winScore(team, otherTeam) {
+  if (!team.length) return 0;
+  const fullMids = team.filter(p => p.pos === 'M' && playerScore(p) === 100).length / team.length;
+  const fullDefs = team.filter(p => p.pos === 'D' && playerScore(p) === 100).length / team.length;
+  const avg = team.reduce((s, p) => s + playerScore(p), 0) / team.length;
+  const sizeDiff = Math.max(0, team.length - otherTeam.length);
+  let extraBonus = 0;
+  if (sizeDiff > 0) {
+    const sorted = [...team].sort((a, b) => playerScore(a) - playerScore(b));
+    for (let i = 0; i < sizeDiff; i++) {
+      extraBonus += playerScore(sorted[i]); // double their score = add it once extra
     }
+  }
+  return fullMids * 400 + fullDefs * 300 + avg + extraBonus;
+}
 
-    function updateBadge() {
-        const n = presentPlayers().length;
-        document.getElementById('presentBadge').textContent = n + ' paikalla';
+function generateCommentary(teamA, teamB) {
+  const allPlayers = [...teamA, ...teamB];
+
+  // Weighted random pick: higher playerScore = more likely, but lower scores get occasional pick too
+  function weightedPick(pool) {
+    if (!pool.length) return null;
+    const weights = pool.map(p => {
+      const s = playerScore(p);
+      // 80% chance weight by score, 20% chance flat (gives underdogs a shot)
+      return Math.random() < 0.8 ? s : 50;
+    });
+    const total = weights.reduce((a, b) => a + b, 0);
+    let r = Math.random() * total;
+    for (let i = 0; i < pool.length; i++) {
+      r -= weights[i];
+      if (r <= 0) return pool[i];
     }
+    return pool[pool.length - 1];
+  }
 
-    // --- TEAMS ---
-    function renderTeamsView() {
-        const present = presentPlayers();
-        document.getElementById('teamsPresent').textContent = present.length + ' pelaajaa';
-        document.getElementById('splitBtn').disabled = present.length < 2;
-        if (currentTeams) renderTeamBoxes(currentTeams);
+  const mids = allPlayers.filter(p => p.pos === 'M');
+  const defs = allPlayers.filter(p => p.pos === 'D');
+  const fwds = allPlayers.filter(p => p.pos === 'F');
+
+  const midTemplates = (n) => [
+    `Riittääkö <em>${n}</em>:n pelinrakennustaito?`,
+    `Kuinka paljon <em>${n}</em> vaikuttaa pelin tempoon?`,
+    `Nähdäänkö <em>${n}</em>:lta yllättävä kaukolaukaus?`,
+    `Osuvatko <em>${n}</em>:n syötöt tänään kohdalleen?`,
+    `Saneleeko <em>${n}</em> joukkueensa pelin rytmin tänään?`,
+    `<em>${n}</em>:lla on iso vastuu puolustuksen ja hyökkäyksen linkittämisessä.`,
+    `Riittääkö <em>${n}</em>:n kunto?`,
+    `Osuvatko <em>${n}</em>:n keskitykset kohdalleen?`,
+    `Edistävätkö <em>${n}</em>:n syötöt peliä?`,
+    `Malttaako <em>${n}</em> syöttää helppoja syöttöjä?`,
+    `Sortuuko <em>${n}</em> kikkailuun?`,
+  ];
+  const defTemplates = (n) => [
+    `Pitääkö <em>${n}</em>:n puolustus?`,
+    `Onko <em>${n}</em> mies paikallaan kun vastustaja iskee?`,
+    `Kuinka tiukka on <em>${n}</em>:n taklaus tänään?`,
+    `Kestääkö <em>${n}</em>:n pää paineen alla?`,
+    `Onnistuuko <em>${n}</em> käynnistämään hyökkäykset alhaalta?`,
+  ];
+  const fwdTemplates = (n) => [
+    `Onko <em>${n}</em>:n maalijyvä kohdallaan?`,
+    `Löytääkö <em>${n}</em> tilaa puolustuksen selustasta?`,
+    `Iskeekö <em>${n}</em> juuri oikealla hetkellä?`,
+    `Onko <em>${n}</em>:n viimeistely terässä?`,
+    `Pystytäänkö <em>${n}</em>:n taitoa käyttämään hyväksi hyökkäyspäässä?`,
+    `Riittääkö <em>${n}</em>:n terävyys?`,
+    `Löytyykö <em>${n}</em>:lta tappajan vaistoa?`,
+  ];
+  const randomComments = [
+    'Onko pallossa oikea paine?',
+    'Onko liivit pesty?',
+    'Kumpi joukkue osaa pelata vahvuuksillaan?',
+    'Kumpi joukkue löytää rytminsä nopeammin?',
+    'Kuka tarjoaa kahvit Hakasella?',
+    'Paras joukkue ei aina voita — mutta lähes aina.',
+    'Noudattavatko molemmat joukkueet pelisuunnitelmaansa?',
+    'Riittääkö suihkuissa lämmin vesi kaikille?',
+  ];
+
+  // Player-specific comments — only shown if that player is present
+  const presentNames = new Set(presentPlayers().map(p => p.name));
+  const playerSpecificComments = [
+    { player: 'Apa', text: 'Keksiikö <em>Apa</em> omia sääntöjään?' },
+    { player: 'Apa', text: 'Yrittääkö <em>Apa</em> maalia puolesta kentästä?' },
+    { player: 'Hanski M.', text: 'Seisooko <em>Hanski M.</em> taas muurina maaliviivalla?' },
+    { player: 'Ralla', text: '<em>Ralla</em> on vaarallinen kulmapotkutilanteissa.' },
+    { player: 'Suiho', text: 'Potkiiko <em>Suiho</em> taas kaikkea mikä liikkuu jaloille?' },
+    { player: 'Suiho', text: 'Pujotteleeko <em>Suiho</em> taas koko kentän läpi näytöstyyliin?' },
+    { player: 'Suiho', text: 'Onko <em>Suiho</em> muistanut venytellä?' },
+    { player: 'Ari', text: 'Onko <em>Ari</em> jälleen kerran pitelemätön keskityspalloissa?' },
+    { player: 'Kille', text: 'Pystytäänkö <em>Kille</em>:n pääpelitaitoa hyödyntämään?' },
+    { player: 'Matti M.', text: 'Ratkaiseeko <em>Matti M.</em>:n kokemus pelin?' },
+  ].filter(c => presentNames.has(c.player));
+
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+  const lines = [];
+  const used = new Set();
+
+  function addPlayerLine(pool, templates) {
+    if (!pool.length) return false;
+    let attempts = 0;
+    while (attempts++ < 10) {
+      const p = weightedPick(pool);
+      if (!used.has(p.id)) {
+        used.add(p.id);
+        lines.push(pick(templates(p.name)));
+        return true;
+      }
     }
+    return false;
+  }
 
-    function playerScore(p) {
-        if (!useVision) return p.level;
-        const v = p.vision ?? p.level;
-        return prioritizeMovement
-            ? Math.round(0.8 * p.level + 0.2 * v)
-            : Math.round(0.4 * p.level + 0.6 * v);
-    }
+  function addSpecificComment() {
+    if (!playerSpecificComments.length) return false;
+    const c = playerSpecificComments[Math.floor(Math.random() * playerSpecificComments.length)];
+    lines.push(c.text);
+    return true;
+  }
 
-    function balancedSplit(present) {
-        const groups = { D: [], M: [], F: [] };
-        present.forEach(p => groups[p.pos].push(p));
+  // Build 3 lines: mix of player comments, specific comments and random quips
+  // ~40% chance to include a player-specific comment if any are available
+  const useSpecific = playerSpecificComments.length > 0 && Math.random() < 0.4;
 
-        let teamA = [], teamB = [];
-        let sumA = 0, sumB = 0;
+  const slots = [
+    () => addPlayerLine(mids.length ? mids : allPlayers, midTemplates),
+    () => addPlayerLine(fwds.length ? fwds : allPlayers, fwdTemplates),
+    () => addPlayerLine(defs.length ? defs : allPlayers, defTemplates),
+    () => { lines.push(pick(randomComments)); return true; },
+    () => addSpecificComment(),
+  ];
 
-        ['D', 'M', 'F'].forEach(pos => {
-            const sorted = groups[pos].sort((a, b) => playerScore(b) - playerScore(a));
-            sorted.forEach(p => {
-                const score = playerScore(p);
-                if (sumA <= sumB) { teamA.push(p); sumA += score; }
-                else { teamB.push(p); sumB += score; }
-            });
-        });
+  // Shuffle slot order, always include at least one random or specific comment
+  const order = useSpecific
+    ? [slots[0], slots[4], slots[Math.random() < 0.5 ? 1 : 3]]
+    : (Math.random() < 0.5 ? [slots[0], slots[3], slots[1]] : [slots[1], slots[0], slots[3]]);
 
-        return { teamA, teamB, sumA, sumB };
-    }
+  order.forEach(fn => fn());
 
-    function toggleVest(id) {
-        if (vestedPlayers.has(id)) vestedPlayers.delete(id);
-        else vestedPlayers.add(id);
-        renderTeamBoxes(currentTeams);
-    }
+  // Pad to 3 if needed
+  while (lines.length < 3) lines.push(pick(randomComments));
 
-    function splitTeams() {
-        const present = presentPlayers();
-        if (present.length < 2) return;
-        vestedPlayers = new Set();
-        currentTeams = balancedSplit([...present]);
-        renderTeamBoxes(currentTeams);
-    }
+  return lines.slice(0, 3);
+}
 
-    function winScore(team, otherTeam) {
-        if (!team.length) return 0;
-        const fullMids = team.filter(p => p.pos === 'M' && playerScore(p) === 100).length / team.length;
-        const fullDefs = team.filter(p => p.pos === 'D' && playerScore(p) === 100).length / team.length;
-        const avg = team.reduce((s, p) => s + playerScore(p), 0) / team.length;
-        const sizeDiff = Math.max(0, team.length - otherTeam.length);
-        return fullMids * 400 + fullDefs * 300 + avg + sizeDiff * 100;
-    }
+function renderTeamBoxes({ teamA, teamB, sumA, sumB }) {
+  const avgA = teamA.length ? Math.round(sumA / teamA.length) : 0;
+  const avgB = teamB.length ? Math.round(sumB / teamB.length) : 0;
 
-    function generateCommentary(teamA, teamB) {
-        const allPlayers = [...teamA, ...teamB];
+  const posOrder = { D: 0, M: 1, F: 2 };
+  const sortTeam = (team) => [...team].sort((a, b) =>
+    posOrder[a.pos] - posOrder[b.pos] || a.name.localeCompare(b.name, 'fi')
+  );
 
-        // Weighted random pick: higher playerScore = more likely, but lower scores get occasional pick too
-        function weightedPick(pool) {
-            if (!pool.length) return null;
-            const weights = pool.map(p => {
-                const s = playerScore(p);
-                // 80% chance weight by score, 20% chance flat (gives underdogs a shot)
-                return Math.random() < 0.8 ? s : 50;
-            });
-            const total = weights.reduce((a, b) => a + b, 0);
-            let r = Math.random() * total;
-            for (let i = 0; i < pool.length; i++) {
-                r -= weights[i];
-                if (r <= 0) return pool[i];
-            }
-            return pool[pool.length - 1];
-        }
-
-        const mids = allPlayers.filter(p => p.pos === 'M');
-        const defs = allPlayers.filter(p => p.pos === 'D');
-        const fwds = allPlayers.filter(p => p.pos === 'F');
-
-        const midTemplates = (n) => [
-            `Riittääkö <em>${n}</em>:n pelinrakennustaito?`,
-            `Kuinka paljon <em>${n}</em> vaikuttaa pelin tempoon?`,
-            `Nähdäänkö <em>${n}</em>:lta yllättävä kaukolaukaus?`,
-            `Osuvatko <em>${n}</em>:n syötöt tänään kohdalleen?`,
-            `Saneleeko <em>${n}</em> joukkueensa pelin rytmin tänään?`,
-            `<em>${n}</em>:lla on iso vastuu puolustuksen ja hyökkäyksen linkittämisessä.`,
-            `Riittääkö <em>${n}</em>:n kunto?`,
-            `Osuvatko <em>${n}</em>:n keskitykset kohdalleen?`,
-            `Edistävätkö <em>${n}</em>:n syötöt peliä?`,
-            `Malttaako <em>${n}</em> syöttää helppoja syöttöjä?`,
-            `Sortuuko <em>${n}</em> kikkailuun?`,
-        ];
-        const defTemplates = (n) => [
-            `Pitääkö <em>${n}</em>:n puolustus?`,
-            `Onko <em>${n}</em> mies paikallaan kun vastustaja iskee?`,
-            `Kuinka tiukka on <em>${n}</em>:n taklaus tänään?`,
-            `Kestääkö <em>${n}</em>:n pää paineen alla?`,
-            `Onnistuuko <em>${n}</em> käynnistämään hyökkäykset alhaalta?`,
-        ];
-        const fwdTemplates = (n) => [
-            `Onko <em>${n}</em>:n maalijyvä kohdallaan?`,
-            `Löytääkö <em>${n}</em> tilaa puolustuksen selustasta?`,
-            `Iskeekö <em>${n}</em> juuri oikealla hetkellä?`,
-            `Onko <em>${n}</em>:n viimeistely terässä?`,
-            `Pystytäänkö <em>${n}</em>:n taitoa käyttämään hyväksi hyökkäyspäässä?`,
-            `Riittääkö <em>${n}</em>:n terävyys?`,
-            `Löytyykö <em>${n}</em>:lta tappajan vaistoa?`,
-        ];
-        const randomComments = [
-            'Onko pallossa oikea paine?',
-            'Onko liivit pesty?',
-            'Kumpi joukkue osaa pelata vahvuuksillaan?',
-            'Kumpi joukkue löytää rytminsä nopeammin?',
-            'Kuka tarjoaa kahvit Hakasella?',
-            'Paras joukkue ei aina voita — mutta lähes aina.',
-            'Noudattavatko molemmat joukkueet pelisuunnitelmaansa?',
-            'Riittääkö suihkuissa lämmin vesi kaikille?',
-        ];
-
-        // Player-specific comments — only shown if that player is present
-        const presentNames = new Set(presentPlayers().map(p => p.name));
-        const playerSpecificComments = [
-            { player: 'Apa', text: 'Keksiikö <em>Apa</em> omia sääntöjään?' },
-            { player: 'Apa', text: 'Yrittääkö <em>Apa</em> maalia puolesta kentästä?' },
-            { player: 'Hanski M.', text: 'Seisooko <em>Hanski M.</em> taas muurina maaliviivalla?' },
-            { player: 'Ralla', text: '<em>Ralla</em> on vaarallinen kulmapotkutilanteissa.' },
-            { player: 'Suiho', text: 'Potkiiko <em>Suiho</em> taas kaikkea mikä liikkuu jaloille?' },
-            { player: 'Suiho', text: 'Pujotteleeko <em>Suiho</em> taas koko kentän läpi näytöstyyliin?' },
-            { player: 'Suiho', text: 'Onko <em>Suiho</em> muistanut venytellä?' },
-            { player: 'Ari', text: 'Onko <em>Ari</em> jälleen kerran pitelemätön keskityspalloissa?' },
-            { player: 'Kille', text: 'Pystytäänkö <em>Kille</em>:n pääpelitaitoa hyödyntämään?' },
-            { player: 'Matti M.', text: 'Ratkaiseeko <em>Matti M.</em>:n kokemus pelin?' },
-        ].filter(c => presentNames.has(c.player));
-
-        function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-
-        const lines = [];
-        const used = new Set();
-
-        function addPlayerLine(pool, templates) {
-            if (!pool.length) return false;
-            let attempts = 0;
-            while (attempts++ < 10) {
-                const p = weightedPick(pool);
-                if (!used.has(p.id)) {
-                    used.add(p.id);
-                    lines.push(pick(templates(p.name)));
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        function addSpecificComment() {
-            if (!playerSpecificComments.length) return false;
-            const c = playerSpecificComments[Math.floor(Math.random() * playerSpecificComments.length)];
-            lines.push(c.text);
-            return true;
-        }
-
-        // Build 3 lines: mix of player comments, specific comments and random quips
-        // ~40% chance to include a player-specific comment if any are available
-        const useSpecific = playerSpecificComments.length > 0 && Math.random() < 0.4;
-
-        const slots = [
-            () => addPlayerLine(mids.length ? mids : allPlayers, midTemplates),
-            () => addPlayerLine(fwds.length ? fwds : allPlayers, fwdTemplates),
-            () => addPlayerLine(defs.length ? defs : allPlayers, defTemplates),
-            () => { lines.push(pick(randomComments)); return true; },
-            () => addSpecificComment(),
-        ];
-
-        // Shuffle slot order, always include at least one random or specific comment
-        const order = useSpecific
-            ? [slots[0], slots[4], slots[Math.random() < 0.5 ? 1 : 3]]
-            : (Math.random() < 0.5 ? [slots[0], slots[3], slots[1]] : [slots[1], slots[0], slots[3]]);
-
-        order.forEach(fn => fn());
-
-        // Pad to 3 if needed
-        while (lines.length < 3) lines.push(pick(randomComments));
-
-        return lines.slice(0, 3);
-    }
-
-    function renderTeamBoxes({ teamA, teamB, sumA, sumB }) {
-        const avgA = teamA.length ? Math.round(sumA / teamA.length) : 0;
-        const avgB = teamB.length ? Math.round(sumB / teamB.length) : 0;
-
-        const posOrder = { D: 0, M: 1, F: 2 };
-        const sortTeam = (team) => [...team].sort((a, b) =>
-            posOrder[a.pos] - posOrder[b.pos] || a.name.localeCompare(b.name, 'fi')
-        );
-
-        const playerRow = (p, fromTeam) => {
-            const arrow = fromTeam === 'A' ? '←' : '→';
-            const isVested = fromTeam === 'B' && vestedPlayers.has(p.id);
-            const vestClick = fromTeam === 'B' ? `onclick="toggleVest(${p.id})"` : '';
-            const vestClass = isVested ? ' vest-given' : '';
-            const vestCursor = fromTeam === 'B' ? 'cursor:pointer;' : '';
-            const debugBadge = showDebug
-                ? `<span style="font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--yellow);font-weight:700;flex-shrink:0;">${playerScore(p)}</span>`
-                : '';
-            return `<div class="team-player${vestClass}" ${vestClick} style="${vestCursor}">
+  const playerRow = (p, fromTeam) => {
+    const arrow = fromTeam === 'A' ? '←' : '→';
+    const isVested = fromTeam === 'B' && vestedPlayers.has(p.id);
+    const vestClick = fromTeam === 'B' ? `onclick="toggleVest(${p.id})"` : '';
+    const vestClass = isVested ? ' vest-given' : '';
+    const vestCursor = fromTeam === 'B' ? 'cursor:pointer;' : '';
+    const debugBadge = showDebug
+      ? `<span style="font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--yellow);font-weight:700;flex-shrink:0;">${playerScore(p)}</span>`
+      : '';
+    return `<div class="team-player${vestClass}" ${vestClick} style="${vestCursor}">
       <span class="pos-badge pos-${p.pos}">${POS_SHORT[p.pos]}</span>
       <span class="team-player-name">${p.name}</span>
       ${debugBadge}
       <button class="move-btn" onclick="event.stopPropagation();movePlayer(${p.id}, '${fromTeam}')" title="Siirrä toiseen joukkueeseen">${arrow}</button>
     </div>`;
-        };
+  };
 
-        const sA = winScore(teamA, teamB), sB = winScore(teamB, teamA);
-        const total = sA + sB || 1;
-        const pctA = Math.round(sA / total * 100);
-        const pctB = 100 - pctA;
+  const sA = winScore(teamA, teamB), sB = winScore(teamB, teamA);
+  const total = sA + sB || 1;
+  const pctA = Math.round(sA / total * 100);
+  const pctB = 100 - pctA;
 
-        const debugB = showDebug ? `<span style="font-size:10px;opacity:0.6;font-weight:600;">${Math.round(sB)}</span>` : '';
-        const debugA = showDebug ? `<span style="font-size:10px;opacity:0.6;font-weight:600;">${Math.round(sA)}</span>` : '';
+  const debugB = showDebug ? `<span style="font-size:10px;opacity:0.6;font-weight:600;">${Math.round(sB)}</span>` : '';
+  const debugA = showDebug ? `<span style="font-size:10px;opacity:0.6;font-weight:600;">${Math.round(sA)}</span>` : '';
 
-        const commentary = generateCommentary(teamA, teamB);
+  const commentary = generateCommentary(teamA, teamB);
 
-        document.getElementById('teamsResult').innerHTML = `
+  document.getElementById('teamsResult').innerHTML = `
     <div class="teams-grid">
       <div class="team-box team-b">
         <div class="team-header">
-          <span>
           Liivilliset ${debugB}
-          </span>
           <span class="team-strength">Ø ${avgB}%</span>
-            
         </div>
         <div class="team-players">${sortTeam(teamB).map(p => playerRow(p, 'B')).join('')}</div>
       </div>
       <div class="team-box team-a">
         <div class="team-header">
-        <span>
           Liivittömät ${debugA}
-          </span>
           <span class="team-strength">Ø ${avgA}%</span>
         </div>
         <div class="team-players">${sortTeam(teamA).map(p => playerRow(p, 'A')).join('')}</div>
@@ -1311,92 +1314,92 @@
     </div>
     <button class="shuffle-btn" onclick="shuffleTeams()">🔀 Sekoita uudelleen</button>
   `;
-    }
+}
 
-    function movePlayer(id, fromTeam) {
-        if (!currentTeams) return;
-        const { teamA, teamB } = currentTeams;
-        if (fromTeam === 'A') {
-            const idx = teamA.findIndex(p => p.id === id);
-            if (idx === -1) return;
-            teamB.push(...teamA.splice(idx, 1));
-        } else {
-            const idx = teamB.findIndex(p => p.id === id);
-            if (idx === -1) return;
-            teamA.push(...teamB.splice(idx, 1));
-        }
-        currentTeams.sumA = teamA.reduce((s, p) => s + p.level, 0);
-        currentTeams.sumB = teamB.reduce((s, p) => s + p.level, 0);
-        renderTeamBoxes(currentTeams);
-    }
+function movePlayer(id, fromTeam) {
+  if (!currentTeams) return;
+  const { teamA, teamB } = currentTeams;
+  if (fromTeam === 'A') {
+    const idx = teamA.findIndex(p => p.id === id);
+    if (idx === -1) return;
+    teamB.push(...teamA.splice(idx, 1));
+  } else {
+    const idx = teamB.findIndex(p => p.id === id);
+    if (idx === -1) return;
+    teamA.push(...teamB.splice(idx, 1));
+  }
+  currentTeams.sumA = teamA.reduce((s, p) => s + p.level, 0);
+  currentTeams.sumB = teamB.reduce((s, p) => s + p.level, 0);
+  renderTeamBoxes(currentTeams);
+}
 
-    function shuffleTeams() {
-        // Shuffle within each position group, then balance
-        const present = presentPlayers();
-        const groups = { D: [], M: [], F: [] };
-        present.forEach(p => groups[p.pos].push(p));
-        ['D', 'M', 'F'].forEach(pos => groups[pos].sort(() => Math.random() - 0.5));
-        const shuffled = [...groups.D, ...groups.M, ...groups.F];
-        vestedPlayers = new Set();
-        currentTeams = balancedSplit(shuffled);
-        renderTeamBoxes(currentTeams);
-    }
+function shuffleTeams() {
+  // Shuffle within each position group, then balance
+  const present = presentPlayers();
+  const groups = { D: [], M: [], F: [] };
+  present.forEach(p => groups[p.pos].push(p));
+  ['D', 'M', 'F'].forEach(pos => groups[pos].sort(() => Math.random() - 0.5));
+  const shuffled = [...groups.D, ...groups.M, ...groups.F];
+  vestedPlayers = new Set();
+  currentTeams = balancedSplit(shuffled);
+  renderTeamBoxes(currentTeams);
+}
 
-    function togglePrioritizeMovement() {
-        prioritizeMovement = document.getElementById('prioritizeMovementToggle').checked;
-        localStorage.setItem('treenijaot_priomove', prioritizeMovement);
-        document.getElementById('prioritizeMovementLabel').textContent = 'Painota jaoissa liikettä: ' + (prioritizeMovement ? 'Kyllä' : 'Ei');
-        if (currentTeams) renderTeamBoxes(currentTeams);
-    }
+function togglePrioritizeMovement() {
+  prioritizeMovement = document.getElementById('prioritizeMovementToggle').checked;
+  localStorage.setItem('treenijaot_priomove', prioritizeMovement);
+  document.getElementById('prioritizeMovementLabel').textContent = 'Painota jaoissa liikettä: ' + (prioritizeMovement ? 'Kyllä' : 'Ei');
+  if (currentTeams) renderTeamBoxes(currentTeams);
+}
 
-    function toggleUseVision() {
-        useVision = document.getElementById('useVisionToggle').checked;
-        localStorage.setItem('treenijaot_usevision', useVision);
-        document.getElementById('useVisionLabel').textContent = 'Pelinäkemys jaoissa: ' + (useVision ? 'Kyllä' : 'Ei');
-        if (currentTeams) {
-            renderTeamBoxes(currentTeams);
-        }
-    }
+function toggleUseVision() {
+  useVision = document.getElementById('useVisionToggle').checked;
+  localStorage.setItem('treenijaot_usevision', useVision);
+  document.getElementById('useVisionLabel').textContent = 'Pelinäkemys jaoissa: ' + (useVision ? 'Kyllä' : 'Ei');
+  if (currentTeams) {
+    renderTeamBoxes(currentTeams);
+  }
+}
 
-    function toggleShowDebug() {
-        showDebug = document.getElementById('showDebugToggle').checked;
-        localStorage.setItem('treenijaot_showdebug', showDebug);
-        document.getElementById('showDebugLabel').textContent = 'Näytä debug-arvot: ' + (showDebug ? 'Kyllä' : 'Ei');
-        if (currentTeams) renderTeamBoxes(currentTeams);
-    }
+function toggleShowDebug() {
+  showDebug = document.getElementById('showDebugToggle').checked;
+  localStorage.setItem('treenijaot_showdebug', showDebug);
+  document.getElementById('showDebugLabel').textContent = 'Näytä debug-arvot: ' + (showDebug ? 'Kyllä' : 'Ei');
+  if (currentTeams) renderTeamBoxes(currentTeams);
+}
 
-    function toggleBigFont() {
-        bigFont = document.getElementById('bigFontToggle').checked;
-        localStorage.setItem('treenijaot_bigfont', bigFont);
-        document.getElementById('bigFontLabel').textContent = 'Isompi kirjainkoko: ' + (bigFont ? 'Kyllä' : 'Ei');
-        document.body.classList.toggle('big-font', bigFont);
-    }
+function toggleBigFont() {
+  bigFont = document.getElementById('bigFontToggle').checked;
+  localStorage.setItem('treenijaot_bigfont', bigFont);
+  document.getElementById('bigFontLabel').textContent = 'Isompi kirjainkoko: ' + (bigFont ? 'Kyllä' : 'Ei');
+  document.body.classList.toggle('big-font', bigFont);
+}
 
-    function toggleShowCommentary() {
-        showCommentary = document.getElementById('showCommentaryToggle').checked;
-        localStorage.setItem('treenijaot_showcommentary', showCommentary);
-        document.getElementById('showCommentaryLabel').textContent = 'Näytä avainkohdat: ' + (showCommentary ? 'Kyllä' : 'Ei');
-        if (currentTeams) renderTeamBoxes(currentTeams);
-    }
+function toggleShowCommentary() {
+  showCommentary = document.getElementById('showCommentaryToggle').checked;
+  localStorage.setItem('treenijaot_showcommentary', showCommentary);
+  document.getElementById('showCommentaryLabel').textContent = 'Näytä avainkohdat: ' + (showCommentary ? 'Kyllä' : 'Ei');
+  if (currentTeams) renderTeamBoxes(currentTeams);
+}
 
-    function toggleShowPercents() {
-        showPercents = document.getElementById('showPercentsToggle').checked;
-        localStorage.setItem('treenijaot_showpercents', showPercents);
-        document.getElementById('showPercentsLabel').textContent = 'Näytä prosentit: ' + (showPercents ? 'Kyllä' : 'Ei');
-        renderAttendance();
-    }
+function toggleShowPercents() {
+  showPercents = document.getElementById('showPercentsToggle').checked;
+  localStorage.setItem('treenijaot_showpercents', showPercents);
+  document.getElementById('showPercentsLabel').textContent = 'Näytä prosentit: ' + (showPercents ? 'Kyllä' : 'Ei');
+  renderAttendance();
+}
 
-    // --- MANAGE ---
-    function renderManage() {
-        const list = document.getElementById('manageList');
-        const countEl = document.getElementById('playerCount');
-        if (countEl) countEl.textContent = players.length + ' pelaajaa';
-        if (!players.length) {
-            list.innerHTML = `<div class="empty-state"><span class="emoji">👤</span>Ei pelaajia.</div>`;
-            return;
-        }
-        const sorted = [...players].sort((a, b) => a.name.localeCompare(b.name, 'fi'));
-        list.innerHTML = sorted.map(p => `
+// --- MANAGE ---
+function renderManage() {
+  const list = document.getElementById('manageList');
+  const countEl = document.getElementById('playerCount');
+  if (countEl) countEl.textContent = players.length + ' pelaajaa';
+  if (!players.length) {
+    list.innerHTML = `<div class="empty-state"><span class="emoji">👤</span>Ei pelaajia.</div>`;
+    return;
+  }
+  const sorted = [...players].sort((a, b) => a.name.localeCompare(b.name, 'fi'));
+  list.innerHTML = sorted.map(p => `
     <div class="manage-card" id="mc-${p.id}">
       <div class="manage-card-top">
         <div class="player-info">
@@ -1420,111 +1423,111 @@
       </div>
     </div>
   `).join('');
-    }
+}
 
-    function toggleActive(id) {
-        const p = players.find(x => x.id === id);
-        if (p) {
-            p.active = !p.active;
-            if (!p.active) p.present = false;
-            save();
-            const label = document.querySelector(`#mc-${id} .toggle-label`);
-            if (label) label.textContent = p.active ? 'Aktiivinen' : 'Ei aktiivinen';
-            updateBadge();
-        }
-    }
+function toggleActive(id) {
+  const p = players.find(x => x.id === id);
+  if (p) {
+    p.active = !p.active;
+    if (!p.active) p.present = false;
+    save();
+    const label = document.querySelector(`#mc-${id} .toggle-label`);
+    if (label) label.textContent = p.active ? 'Aktiivinen' : 'Ei aktiivinen';
+    updateBadge();
+  }
+}
 
-    function deletePlayer(id) {
-        if (!confirm('Poistetaanko pelaaja?')) return;
-        players = players.filter(p => p.id !== id);
-        save();
-        renderManage();
-        updateBadge();
-    }
+function deletePlayer(id) {
+  if (!confirm('Poistetaanko pelaaja?')) return;
+  players = players.filter(p => p.id !== id);
+  save();
+  renderManage();
+  updateBadge();
+}
 
-    function addPlayer() {
-        const name = document.getElementById('newName').value.trim();
-        if (!name) { document.getElementById('newName').focus(); return; }
-        const pos = document.getElementById('newPos').value;
-        const level = parseInt(document.getElementById('newLevel').value);
-        const vision = parseInt(document.getElementById('newVision').value);
-        players.push({ id: nextId++, name, pos, level, vision, active: true, present: false });
-        save();
-        document.getElementById('newName').value = '';
-        document.getElementById('newLevel').value = 70;
-        document.getElementById('newLevelVal').textContent = '70';
-        document.getElementById('newVision').value = 70;
-        document.getElementById('newVisionVal').textContent = '70';
-        renderManage();
-    }
+function addPlayer() {
+  const name = document.getElementById('newName').value.trim();
+  if (!name) { document.getElementById('newName').focus(); return; }
+  const pos = document.getElementById('newPos').value;
+  const level = parseInt(document.getElementById('newLevel').value);
+  const vision = parseInt(document.getElementById('newVision').value);
+  players.push({ id: nextId++, name, pos, level, vision, active: true, present: false });
+  save();
+  document.getElementById('newName').value = '';
+  document.getElementById('newLevel').value = 70;
+  document.getElementById('newLevelVal').textContent = '70';
+  document.getElementById('newVision').value = 70;
+  document.getElementById('newVisionVal').textContent = '70';
+  renderManage();
+}
 
-    // sync range display
-    document.getElementById('newLevel').addEventListener('input', function () {
-        document.getElementById('newLevelDisp').textContent = this.value + '%';
-    });
-    document.getElementById('editLevel').addEventListener('input', function () {
-        document.getElementById('editLevelDisp').textContent = this.value + '%';
-    });
-    document.getElementById('newVision').addEventListener('input', function () {
-        document.getElementById('newVisionDisp').textContent = this.value + '%';
-    });
-    document.getElementById('editVision').addEventListener('input', function () {
-        document.getElementById('editVisionDisp').textContent = this.value + '%';
-    });
+// sync range display
+document.getElementById('newLevel').addEventListener('input', function() {
+  document.getElementById('newLevelDisp').textContent = this.value + '%';
+});
+document.getElementById('editLevel').addEventListener('input', function() {
+  document.getElementById('editLevelDisp').textContent = this.value + '%';
+});
+document.getElementById('newVision').addEventListener('input', function() {
+  document.getElementById('newVisionDisp').textContent = this.value + '%';
+});
+document.getElementById('editVision').addEventListener('input', function() {
+  document.getElementById('editVisionDisp').textContent = this.value + '%';
+});
 
-    function openEdit(id) {
-        const p = players.find(x => x.id === id);
-        if (!p) return;
-        editingId = id;
-        document.getElementById('editName').value = p.name;
-        document.getElementById('editPos').value = p.pos;
-        document.getElementById('editLevel').value = p.level;
-        document.getElementById('editLevelVal').textContent = p.level;
-        document.getElementById('editLevelDisp').textContent = p.level + '%';
-        const vision = p.vision ?? p.level;
-        document.getElementById('editVision').value = vision;
-        document.getElementById('editVisionVal').textContent = vision;
-        document.getElementById('editVisionDisp').textContent = vision + '%';
-        document.getElementById('editModal').classList.add('open');
-    }
+function openEdit(id) {
+  const p = players.find(x => x.id === id);
+  if (!p) return;
+  editingId = id;
+  document.getElementById('editName').value = p.name;
+  document.getElementById('editPos').value = p.pos;
+  document.getElementById('editLevel').value = p.level;
+  document.getElementById('editLevelVal').textContent = p.level;
+  document.getElementById('editLevelDisp').textContent = p.level + '%';
+  const vision = p.vision ?? p.level;
+  document.getElementById('editVision').value = vision;
+  document.getElementById('editVisionVal').textContent = vision;
+  document.getElementById('editVisionDisp').textContent = vision + '%';
+  document.getElementById('editModal').classList.add('open');
+}
 
-    function closeModal() {
-        document.getElementById('editModal').classList.remove('open');
-        editingId = null;
-    }
+function closeModal() {
+  document.getElementById('editModal').classList.remove('open');
+  editingId = null;
+}
 
-    function saveEdit() {
-        const p = players.find(x => x.id === editingId);
-        if (!p) return;
-        const name = document.getElementById('editName').value.trim();
-        if (!name) return;
-        p.name = name;
-        p.pos = document.getElementById('editPos').value;
-        p.level = parseInt(document.getElementById('editLevel').value);
-        p.vision = parseInt(document.getElementById('editVision').value);
-        save();
-        closeModal();
-        renderManage();
-    }
+function saveEdit() {
+  const p = players.find(x => x.id === editingId);
+  if (!p) return;
+  const name = document.getElementById('editName').value.trim();
+  if (!name) return;
+  p.name = name;
+  p.pos = document.getElementById('editPos').value;
+  p.level = parseInt(document.getElementById('editLevel').value);
+  p.vision = parseInt(document.getElementById('editVision').value);
+  save();
+  closeModal();
+  renderManage();
+}
 
-    document.getElementById('editModal').addEventListener('click', function (e) {
-        if (e.target === this) closeModal();
-    });
+document.getElementById('editModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
 
-    function clearStorage() {
-        if (!confirm('Tämä palauttaa oletuspelaajat ja poistaa kaikki muutokset. Oletko varma?')) return;
-        localStorage.removeItem('treenijaot_players');
-        players = getDefaultPlayers();
-        nextId = Math.max(...players.map(p => p.id)) + 1;
-        currentTeams = null;
-        renderManage();
-        renderAttendance();
-    }
+function clearStorage() {
+  if (!confirm('Tämä palauttaa oletuspelaajat ja poistaa kaikki muutokset. Oletko varma?')) return;
+  localStorage.removeItem('treenijaot_players');
+  players = getDefaultPlayers();
+  nextId = Math.max(...players.map(p => p.id)) + 1;
+  currentTeams = null;
+  renderManage();
+  renderAttendance();
+}
 
-    // INIT
-    if (bigFont) document.body.classList.add('big-font');
-    renderAttendance();
-    // sync toggle on first load if manage view is somehow active
+// INIT
+if (bigFont) document.body.classList.add('big-font');
+renderAttendance();
+// sync toggle on first load if manage view is somehow active
 </script>
 </body>
 </html>
