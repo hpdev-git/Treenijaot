@@ -1275,14 +1275,18 @@ function renderTeamBoxes({ teamA, teamB, sumA, sumB }) {
     <div class="teams-grid">
       <div class="team-box team-b">
         <div class="team-header">
-          Liivilliset ${debugB}
+          <div>
+            Liivilliset ${debugB}
+          </div>
           <span class="team-strength">Ø ${avgB}%</span>
         </div>
         <div class="team-players">${sortTeam(teamB).map(p => playerRow(p, 'B')).join('')}</div>
       </div>
       <div class="team-box team-a">
         <div class="team-header">
-          Liivittömät ${debugA}
+          <div>
+            Liivittömät ${debugA}
+          </div>
           <span class="team-strength">Ø ${avgA}%</span>
         </div>
         <div class="team-players">${sortTeam(teamA).map(p => playerRow(p, 'A')).join('')}</div>
