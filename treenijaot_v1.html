@@ -871,12 +871,12 @@ const POS_SHORT = { D: 'PUO', M: 'KK', F: 'HYÖ' };
 
 function getDefaultPlayers() {
     return [
-        { id: 1, name: 'Apa', pos: 'M', level: 80, vision: 100, active: true, present: false },
+        { id: 1, name: 'Apa', pos: 'M', level: 70, vision: 100, active: true, present: false },
         { id: 2, name: 'Ari', pos: 'F', level: 80, vision: 50, active: true, present: false },
         { id: 3, name: 'Aku', pos: 'M', level: 80, vision: 90, active: true, present: false },
         { id: 4, name: 'Arto', pos: 'M', level: 100, vision: 60, active: true, present: false },
         { id: 5, name: 'Charlie', pos: 'F', level: 40, vision: 50, active: true, present: false },
-        { id: 6, name: 'Eero', pos: 'M', level: 100, vision: 70, active: true, present: false },
+        { id: 6, name: 'Eero', pos: 'M', level: 100, vision: 60, active: true, present: false },
         { id: 7, name: 'Ilpo', pos: 'M', level: 100, vision: 60, active: true, present: false },
         { id: 8, name: 'Esko H.', pos: 'D', level: 60, vision: 50, active: true, present: false },
         { id: 9, name: 'H-P', pos: 'M', level: 100, vision: 100, active: true, present: false },
@@ -906,7 +906,7 @@ function getDefaultPlayers() {
         { id: 33, name: 'Kille', pos: 'F', level: 30, vision: 50, active: true, present: false },
         { id: 34, name: 'Keijo', pos: 'D', level: 20, vision: 30, active: false, present: false },
         { id: 35, name: 'Jussi N.', pos: 'D', level: 90, vision: 60, active: true, present: false },
-        { id: 36, name: 'Jouni T.', pos: 'F', level: 50, vision: 80, active: true, present: false },
+        { id: 36, name: 'Jouni T.', pos: 'F', level: 40, vision: 80, active: true, present: false },
         { id: 37, name: 'Markus', pos: 'M', level: 50, vision: 100, active: false, present: false },
         { id: 38, name: 'Ana', pos: 'M', level: 10, vision: 70, active: false, present: false },
         { id: 39, name: 'Manlio', pos: 'M', level: 70, vision: 30, active: false, present: false },
@@ -1101,7 +1101,8 @@ function winScore(team, otherTeam) {
       extraBonus += playerScore(sorted[i]); // double their score = add it once extra
     }
   }
-  return fullMids * 400 + fullDefs * 300 + avg + extraBonus;
+  return avg + extraBonus;
+  //return fullMids * 400 + fullDefs * 300 + avg + extraBonus;
 }
 
 function generateCommentary(teamA, teamB) {
