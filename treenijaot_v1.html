@@ -931,18 +931,22 @@
 
         /* BIG FONT MODE */
         body.big-font .player-name {
-            font-size: 2rem;
+            font-size: 2.5rem;
         }
 
         body.big-font .manage-name {
-            font-size: 2rem;
+            font-size: 2.5rem;
         }
 
         body.big-font .team-player-name {
-            font-size: 1.5rem;
+            font-size: 1.7rem;
         }
 
         body.big-font .toggle-label {
+            font-size: 1rem;
+        }
+        
+        body.big-font .commentary-item {
             font-size: 1rem;
         }
     </style>
@@ -1358,8 +1362,9 @@
             const fullDefs = team.filter(p => p.pos === 'D' && playerScore(p) === 100).length / team.length;
             const avg = team.reduce((s, p) => s + playerScore(p), 0) / team.length;
             const sizeDiff = Math.max(0, team.length - otherTeam.length);
+            const playerCount = team.length + otherTeam.length;
             let extraBonus = 0;
-            if (sizeDiff > 0) {
+            if (sizeDiff > 0 && playerCount <= 10) {
                 const sorted = [...team].sort((a, b) => playerScore(a) - playerScore(b));
                 for (let i = 0; i < sizeDiff; i++) {
                     extraBonus += playerScore(sorted[i]); // double their score = add it once extra
