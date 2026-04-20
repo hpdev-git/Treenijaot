@@ -1364,7 +1364,7 @@
             const sizeDiff = Math.max(0, team.length - otherTeam.length);
             const playerCount = team.length + otherTeam.length;
             let extraBonus = 0;
-            if (sizeDiff > 0 && playerCount <= 10) {
+            if (sizeDiff > 0 && playerCount < 20) {
                 const sorted = [...team].sort((a, b) => playerScore(a) - playerScore(b));
                 for (let i = 0; i < sizeDiff; i++) {
                     extraBonus += playerScore(sorted[i]); // double their score = add it once extra
