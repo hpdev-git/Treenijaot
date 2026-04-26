@@ -1,0 +1,1963 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Ilves 60+ treenijaot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d1117;
+            --surface: #161b22;
+            --surface2: #1f2937;
+            --border: #30363d;
+            --green: #3fb950;
+            --green-dim: #1a3a22;
+            --red: #f85149;
+            --red-dim: #3a1a1a;
+            --yellow: #d29922;
+            --blue: #58a6ff;
+            --blue-dim: #1a2a3a;
+            --text: #e6edf3;
+            --text-muted: #7d8590;
+            --accent: #f0883e;
+            --team-a: #1e3a5f;
+            --team-b: #3a1e1e;
+            --team-a-accent: #58a6ff;
+            --team-b-accent: #f85149;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Barlow', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #0d1117 0%, #1a2332 100%);
+            border-bottom: 2px solid var(--accent);
+            padding: 16px 16px 12px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .header h1 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: 28px;
+            letter-spacing: 1px;
+            color: var(--text);
+            line-height: 1;
+        }
+
+            .header h1 span {
+                color: var(--accent);
+            }
+
+        .header span.version {
+            color: white;
+            font-size: 10px;
+            font-weight: normal;
+            margin: .5rem .5rem 0 0;
+            display: block;
+        }
+
+        .present-badge {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            background: var(--green-dim);
+            color: var(--green);
+            border: 1px solid var(--green);
+            border-radius: 20px;
+            padding: 4px 10px;
+            white-space: nowrap;
+        }
+
+        /* NAV TABS */
+        .tabs {
+            display: flex;
+            gap: 4px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 8px 4px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--surface);
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.15s;
+            text-align: center;
+        }
+
+            .tab.active {
+                background: var(--accent);
+                color: #000;
+                border-color: var(--accent);
+            }
+
+        /* VIEWS */
+        .view {
+            display: none;
+            padding: 12px;
+        }
+
+            .view.active {
+                display: block;
+            }
+
+        /* PLAYER CARD */
+        .section-label {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            padding: 8px 0 6px;
+        }
+
+        .player-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin-bottom: 6px;
+            cursor: pointer;
+            transition: all 0.15s;
+            user-select: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .player-card.present {
+                border-color: var(--green);
+                background: linear-gradient(135deg, var(--surface) 0%, #1a2e1a 100%);
+            }
+
+                .player-card.present::before {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    bottom: 0;
+                    width: 3px;
+                    background: var(--green);
+                }
+
+            .player-card:active {
+                transform: scale(0.98);
+            }
+
+        .check-circle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.15s;
+            font-size: 14px;
+        }
+
+        .player-card.present .check-circle {
+            background: var(--green);
+            border-color: var(--green);
+            color: #000;
+        }
+
+        .player-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .player-name {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 17px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .player-meta {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 2px;
+        }
+
+        .pos-badge {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 1px 6px;
+            border-radius: 3px;
+        }
+
+        .pos-D {
+            background: #1a2a3a;
+            color: #58a6ff;
+        }
+
+        .pos-M {
+            background: #1a3a1a;
+            color: #3fb950;
+        }
+
+        .pos-F {
+            background: #3a1a1a;
+            color: #f85149;
+        }
+
+        .level-bar-wrap {
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 2px;
+        }
+
+        .level-num {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--accent);
+        }
+
+        .level-bar {
+            width: 44px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .level-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--yellow), var(--accent));
+            border-radius: 2px;
+            transition: width 0.3s;
+        }
+
+        /* SPLIT BUTTON */
+        .split-btn {
+            width: 100%;
+            padding: 16px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--accent) 0%, #e05c0c 100%);
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 12px 0;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+            .split-btn:active {
+                transform: scale(0.98);
+            }
+
+            .split-btn:disabled {
+                opacity: 0.4;
+                cursor: not-allowed;
+            }
+
+        /* TEAMS */
+        .teams-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .team-box {
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .team-a {
+            border-color: var(--team-a-accent);
+        }
+
+        .team-b {
+            border-color: var(--team-b-accent);
+        }
+
+        .team-header {
+            padding: 8px 10px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: 15px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .team-a .team-header {
+            background: var(--team-a);
+            color: var(--team-a-accent);
+        }
+
+        .team-b .team-header {
+            background: var(--team-b);
+            color: var(--team-b-accent);
+        }
+
+        .team-strength {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+
+        .team-players {
+            padding: 6px;
+            background: var(--surface);
+        }
+
+        .team-player {
+            padding: 4px 6px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border-radius: 5px;
+            margin-bottom: 2px;
+        }
+
+        .team-player-name {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .move-btn {
+            flex-shrink: 0;
+            width: 22px;
+            height: 22px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background: var(--surface2);
+            color: var(--text-muted);
+            font-size: 11px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+            line-height: 1;
+        }
+
+        .team-a .move-btn:active {
+            background: rgba(248,81,73,0.2);
+            color: var(--team-b-accent);
+        }
+
+        .team-b .move-btn:active {
+            background: rgba(88,166,255,0.2);
+            color: var(--team-a-accent);
+        }
+
+        .team-a .team-player:hover {
+            background: rgba(88,166,255,0.08);
+        }
+
+        .team-b .team-player:hover {
+            background: rgba(248,81,73,0.08);
+        }
+
+        .team-b .team-player.vest-given {
+            background: rgba(63,185,80,0.3);
+        }
+
+            .team-b .team-player.vest-given:hover {
+                background: rgba(63,185,80,0.2);
+            }
+
+        /* MANAGE VIEW */
+        .manage-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin-bottom: 6px;
+            overflow: hidden;
+        }
+
+        .manage-card-top {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+        }
+
+        .manage-name {
+            flex: 1;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 17px;
+        }
+
+        .manage-actions {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .icon-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--surface2);
+            color: var(--text);
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+
+            .icon-btn:active {
+                transform: scale(0.92);
+            }
+
+            .icon-btn.danger {
+                color: var(--red);
+                border-color: var(--red-dim);
+            }
+
+            .icon-btn.edit {
+                color: var(--blue);
+                border-color: var(--blue-dim);
+            }
+
+        .active-toggle {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0 12px 8px;
+        }
+
+        .toggle {
+            position: relative;
+            width: 38px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+            .toggle input {
+                display: none;
+            }
+
+        .toggle-slider {
+            position: absolute;
+            inset: 0;
+            background: var(--border);
+            border-radius: 20px;
+            transition: 0.2s;
+        }
+
+            .toggle-slider::after {
+                content: '';
+                position: absolute;
+                width: 14px;
+                height: 14px;
+                background: var(--text-muted);
+                border-radius: 50%;
+                top: 3px;
+                left: 3px;
+                transition: 0.2s;
+            }
+
+        .toggle input:checked + .toggle-slider {
+            background: var(--green);
+        }
+
+            .toggle input:checked + .toggle-slider::after {
+                transform: translateX(18px);
+                background: #000;
+            }
+
+        .toggle-label {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* ADD FORM */
+        .add-form {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+            .add-form h3 {
+                font-family: 'Barlow Condensed', sans-serif;
+                font-weight: 700;
+                font-size: 16px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                color: var(--accent);
+                margin-bottom: 12px;
+            }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            color: var(--text);
+            font-family: 'Barlow', sans-serif;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+            .form-input:focus, .form-select:focus {
+                border-color: var(--accent);
+            }
+
+            .form-select option {
+                background: var(--bg);
+            }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+        }
+
+            .form-row .form-group {
+                flex: 1;
+            }
+
+        .range-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        input[type=range] {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            outline: none;
+        }
+
+            input[type=range]::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                width: 18px;
+                height: 18px;
+                background: var(--accent);
+                border-radius: 50%;
+                cursor: pointer;
+            }
+
+        .range-val {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--accent);
+            min-width: 36px;
+            text-align: right;
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--green);
+            color: #000;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: 16px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: all 0.15s;
+            margin-top: 6px;
+        }
+
+            .add-btn:active {
+                transform: scale(0.98);
+            }
+
+        /* MODAL */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 200;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+            .modal-overlay.open {
+                display: flex;
+            }
+
+        .modal {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-top: 2px solid var(--accent);
+            border-radius: 16px 16px 0 0;
+            padding: 20px;
+            width: 100%;
+            max-width: 480px;
+            animation: slideUp 0.25s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .modal h3 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .modal-btns {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .modal-cancel {
+            flex: 1;
+            padding: 12px;
+            background: var(--surface2);
+            color: var(--text-muted);
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 15px;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .modal-save {
+            flex: 2;
+            padding: 12px;
+            background: var(--accent);
+            color: #000;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: 15px;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 16px;
+        }
+
+            .empty-state .emoji {
+                font-size: 40px;
+                display: block;
+                margin-bottom: 10px;
+            }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            background: var(--surface2);
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+            .info-row strong {
+                color: var(--text);
+            }
+
+        .clear-btn {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            color: var(--red);
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 15px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 1px solid var(--red-dim);
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.15s;
+        }
+
+            .clear-btn:active {
+                background: var(--red-dim);
+                transform: scale(0.98);
+            }
+
+        .shuffle-btn {
+            width: 100%;
+            padding: 12px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 15px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: var(--surface2);
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.15s;
+        }
+
+            .shuffle-btn:active {
+                transform: scale(0.98);
+            }
+
+        /* WIN PREDICTION */
+        .prediction {
+            margin-top: 12px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .prediction-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 10px 12px 6px;
+        }
+
+        .prediction-bar-wrap {
+            display: flex;
+            height: 36px;
+            margin: 0 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            gap: 2px;
+        }
+
+            .prediction-bar-wrap.positions {
+                margin-bottom: 12px;
+            }
+
+        .prediction-bar-a {
+            background: linear-gradient(90deg, var(--team-a-accent), #3a7bd5);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            transition: width 0.6s cubic-bezier(.4,0,.2,1);
+            min-width: 0;
+            overflow: hidden;
+        }
+
+            .prediction-bar-a.positions {
+                background-image: none, linear-gradient(90deg, #25518f, var(--team-a-accent));
+            }
+
+        .prediction-bar-b {
+            background: linear-gradient(90deg, #c0392b, var(--team-b-accent));
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding-left: 8px;
+            transition: width 0.6s cubic-bezier(.4,0,.2,1);
+            min-width: 0;
+            overflow: hidden;
+        }
+
+            .prediction-bar-b.positions {
+                background-image: none, linear-gradient(90deg, #932a20, var(--team-b-accent));
+            }
+
+        .prediction-bar-pct {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: 15px;
+            color: rgba(255,255,255,0.9);
+            white-space: nowrap;
+        }
+
+        .prediction-labels {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 12px 12px;
+        }
+
+        .prediction-label {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+
+        .prediction-label-a {
+            color: var(--team-a-accent);
+            text-align: left;
+        }
+
+        .prediction-label-b {
+            color: var(--team-b-accent);
+            text-align: right;
+        }
+
+        .prediction-name {
+            font-size: 12px;
+            opacity: 0.8;
+            font-weight: 600;
+        }
+
+        .prediction-positions {
+            padding-bottom: 12px;
+        }
+
+        .prediction-positions-label {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: 10px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 7px;
+            margin-left: 12px;
+        }
+
+        .match-commentary {
+            border-top: 1px solid var(--border);
+            padding: 10px 12px 12px;
+        }
+
+        .commentary-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: 10px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 7px;
+        }
+
+        .commentary-item {
+            font-family: 'Barlow', sans-serif;
+            font-size: 13px;
+            color: var(--text-muted);
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            line-height: 1.4;
+        }
+
+            .commentary-item:last-child {
+                border-bottom: none;
+            }
+
+            .commentary-item em {
+                font-style: normal;
+                color: var(--text);
+                font-weight: 600;
+            }
+
+        /* BIG FONT MODE */
+        body.big-font .player-name {
+            font-size: 2.5rem;
+        }
+
+        body.big-font .manage-name {
+            font-size: 2.5rem;
+        }
+
+        body.big-font .team-player-name {
+            font-size: 1.7rem;
+        }
+
+        body.big-font .toggle-label {
+            font-size: 1rem;
+        }
+
+        body.big-font .commentary-item {
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-top">
+            <h1>⚽ ILVES 60+ <span>TREENIJAOT</span></h1>
+            <div>
+                <div class="present-badge" id="presentBadge">0 paikalla</div>
+                <span class="version">v.2026.04.26(1)</span>
+            </div>
+        </div>
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('attendance')">Läsnäolo</div>
+            <div class="tab" onclick="switchTab('teams')">Joukkueet</div>
+            <div class="tab" onclick="switchTab('manage')">Hallinta</div>
+        </div>
+    </div>
+
+    <!-- ATTENDANCE VIEW -->
+    <div class="view active" id="view-attendance">
+        <button class="shuffle-btn" style="margin-bottom:8px;" onclick="clearAttendance()">✕ Tyhjennä läsnäolot</button>
+        <div id="attendanceList"></div>
+    </div>
+
+    <!-- TEAMS VIEW -->
+    <div class="view" id="view-teams">
+        <div class="info-row">
+            <span>Paikalla olevat</span>
+            <strong id="teamsPresent">—</strong>
+        </div>
+        <button class="split-btn" id="splitBtn" onclick="splitTeams()">
+            ⚡ Tee jaot
+        </button>
+        <div id="teamsResult"></div>
+    </div>
+
+    <!-- MANAGE VIEW -->
+    <div class="view" id="view-manage">
+        <div class="add-form">
+            <h3>+ Lisää pelaaja</h3>
+            <div class="form-group">
+                <label class="form-label">Nimi</label>
+                <input class="form-input" id="newName" type="text" placeholder="Pelaajan nimi">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Pelipaikka</label>
+                    <select class="form-select" id="newPos">
+                        <option value="D">Puolustaja</option>
+                        <option value="M">Keskikenttä</option>
+                        <option value="F">Hyökkääjä</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Liikkuvuus: <span id="newLevelVal">70</span>%</label>
+                <div class="range-wrap">
+                    <input type="range" id="newLevel" min="0" max="100" value="70" step="10"
+                           oninput="document.getElementById('newLevelVal').textContent=this.value">
+                    <span class="range-val" id="newLevelDisp">70%</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Pelinäkemys: <span id="newVisionVal">70</span>%</label>
+                <div class="range-wrap">
+                    <input type="range" id="newVision" min="0" max="100" value="70" step="10"
+                           oninput="document.getElementById('newVisionVal').textContent=this.value">
+                    <span class="range-val" id="newVisionDisp">70%</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Syöttäminen: <span id="newPassingVal">70</span>%</label>
+                <div class="range-wrap">
+                    <input type="range" id="newPassing" min="0" max="100" value="70" step="10"
+                           oninput="document.getElementById('newPassingVal').textContent=this.value">
+                    <span class="range-val" id="newPassingDisp">70%</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Puolustaminen: <span id="newDefenceVal">70</span>%</label>
+                <div class="range-wrap">
+                    <input type="range" id="newDefence" min="0" max="100" value="70" step="10"
+                           oninput="document.getElementById('newDefenceVal').textContent=this.value">
+                    <span class="range-val" id="newDefenceDisp">70%</span>
+                </div>
+            </div>
+            <button class="add-btn" onclick="addPlayer()">✓ Lisää pelaaja</button>
+        </div>
+
+        <div class="section-label">Asetukset</div>
+        <!--<div class="manage-card" style="margin-bottom:6px;">
+            <div class="active-toggle" style="padding:10px 12px;">
+                <label class="toggle">
+                    <input type="checkbox" id="useVisionToggle" onchange="toggleUseVision()">
+                    <div class="toggle-slider"></div>
+                </label>
+                <span class="toggle-label" id="useVisionLabel">Pelinäkemys jaoissa: Ei</span>
+            </div>
+        </div>-->
+        <div class="manage-card" style="margin-bottom:6px;">
+            <div class="active-toggle" style="padding:10px 12px;">
+                <label class="toggle">
+                    <input type="checkbox" id="useWeightingToggle" onchange="toggleUseWeighting()">
+                    <div class="toggle-slider"></div>
+                </label>
+                <span class="toggle-label" id="useWeightingLabel">Käytä 100% pelaajien painotusta: Ei</span>
+            </div>
+        </div>
+        <!--<div class="manage-card" style="margin-bottom:6px;">
+            <div class="active-toggle" style="padding:10px 12px;">
+                <label class="toggle">
+                    <input type="checkbox" id="prioritizeMovementToggle" onchange="togglePrioritizeMovement()">
+                    <div class="toggle-slider"></div>
+                </label>
+                <span class="toggle-label" id="prioritizeMovementLabel">Painota jaoissa liikettä: Ei</span>
+            </div>
+        </div>-->
+        <div class="manage-card" style="margin-bottom:12px;">
+            <div class="active-toggle" style="padding:10px 12px;">
+                <label class="toggle">
+                    <input type="checkbox" id="showCommentaryToggle" onchange="toggleShowCommentary()">
+                    <div class="toggle-slider"></div>
+                </label>
+                <span class="toggle-label" id="showCommentaryLabel">Näytä avainkohdat: Ei</span>
+            </div>
+        </div>
+        <div class="manage-card" style="margin-bottom:12px;">
+            <div class="active-toggle" style="padding:10px 12px;">
+                <label class="toggle">
+                    <input type="checkbox" id="bigFontToggle" onchange="toggleBigFont()">
+                    <div class="toggle-slider"></div>
+                </label>
+                <span class="toggle-label" id="bigFontLabel">Isompi kirjainkoko: Ei</span>
+            </div>
+        </div>
+        <div class="manage-card" style="margin-bottom:12px;">
+            <div class="active-toggle" style="padding:10px 12px;">
+                <label class="toggle">
+                    <input type="checkbox" id="showDebugToggle" onchange="toggleShowDebug()">
+                    <div class="toggle-slider"></div>
+                </label>
+                <span class="toggle-label" id="showDebugLabel">Näytä debug-arvot: Ei</span>
+            </div>
+        </div>
+
+        <div class="section-label" style="display:flex;justify-content:space-between;align-items:center;">
+            <span>Pelaajat</span>
+            <span id="playerCount" style="font-size:11px;background:var(--surface2);color:var(--text-muted);border:1px solid var(--border);border-radius:20px;padding:2px 8px;font-weight:700;letter-spacing:1px;"></span>
+        </div>
+        <div id="manageList"></div>
+
+        <button class="clear-btn" onclick="clearStorage()">🗑 Palauta oletusasetukset</button>
+    </div>
+
+    <!-- EDIT MODAL -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <h3>Muokkaa pelaajaa</h3>
+            <div class="form-group">
+                <label class="form-label">Nimi</label>
+                <input class="form-input" id="editName" type="text">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Pelipaikka</label>
+                <select class="form-select" id="editPos">
+                    <option value="D">Puolustaja</option>
+                    <option value="M">Keskikenttä</option>
+                    <option value="F">Hyökkääjä</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Liikkuvuus: <span id="editLevelVal">70</span>%</label>
+                <div class="range-wrap">
+                    <input type="range" id="editLevel" min="0" max="100" value="70" step="10"
+                           oninput="document.getElementById('editLevelVal').textContent=this.value">
+                    <span class="range-val" id="editLevelDisp"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Pelinäkemys: <span id="editVisionVal">70</span>%</label>
+                <div class="range-wrap">
+                    <input type="range" id="editVision" min="0" max="100" value="70" step="10"
+                           oninput="document.getElementById('editVisionVal').textContent=this.value">
+                    <span class="range-val" id="editVisionDisp"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Syöttäminen: <span id="editPassingVal">70</span>%</label>
+                <div class="range-wrap">
+                    <input type="range" id="editPassing" min="0" max="100" value="70" step="10"
+                           oninput="document.getElementById('editPassingVal').textContent=this.value">
+                    <span class="range-val" id="editPassingDisp"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Puolustaminen: <span id="editDefenceVal">70</span>%</label>
+                <div class="range-wrap">
+                    <input type="range" id="editDefence" min="0" max="100" value="70" step="10"
+                           oninput="document.getElementById('editDefenceVal').textContent=this.value">
+                    <span class="range-val" id="editDefenceDisp"></span>
+                </div>
+            </div>
+            <div class="modal-btns">
+                <button class="modal-cancel" onclick="closeModal()">Peruuta</button>
+                <button class="modal-save" onclick="saveEdit()">Tallenna</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const POS_PLURAL = { D: 'Puolustajat', M: 'Keskikentät', F: 'Hyökkääjät' };
+        const POS_SHORT = { D: 'PUO', M: 'KK', F: 'HYÖ' };
+
+        function getDefaultPlayers() {
+            return [
+                { id: 1, name: 'Apa', pos: 'M', level: 70, vision: 100, passing: 100, defence: 80, active: true, present: false },
+                { id: 2, name: 'Ari', pos: 'F', level: 80, vision: 50, passing: 60, defence: 40, active: true, present: false },
+                { id: 3, name: 'Aku', pos: 'M', level: 80, vision: 90, passing: 90, defence: 70, active: true, present: false },
+                { id: 4, name: 'Arto', pos: 'M', level: 100, vision: 60, passing: 80, defence: 100, active: true, present: false },
+                { id: 5, name: 'Charlie', pos: 'F', level: 40, vision: 50, passing: 40, defence: 40, active: true, present: false },
+                { id: 6, name: 'Eero', pos: 'M', level: 100, vision: 60, passing: 80, defence: 90, active: true, present: false },
+                { id: 7, name: 'Ilpo', pos: 'M', level: 100, vision: 60, passing: 100, defence: 20, active: true, present: false },
+                { id: 8, name: 'Esko H.', pos: 'D', level: 60, vision: 50, passing: 50, defence: 100, active: true, present: false },
+                { id: 9, name: 'H-P', pos: 'M', level: 100, vision: 100, passing: 100, defence: 90, active: true, present: false },
+                { id: 10, name: 'Hanski M.', pos: 'D', level: 100, vision: 90, passing: 100, defence: 100, active: true, present: false },
+                { id: 11, name: 'Harry', pos: 'M', level: 40, vision: 80, passing: 60, defence: 60, active: true, present: false },
+                { id: 12, name: 'Heikki H.', pos: 'M', level: 50, vision: 100, passing: 90, defence: 100, active: true, present: false },
+                { id: 13, name: 'Ilkka J.', pos: 'M', level: 70, vision: 50, passing: 60, defence: 60, active: false, present: false },
+                { id: 14, name: 'Ilkka M.', pos: 'M', level: 60, vision: 60, passing: 60, defence: 40, active: true, present: false },
+                { id: 15, name: 'Jouni K.', pos: 'D', level: 60, vision: 60, passing: 60, defence: 100, active: true, present: false },
+                { id: 16, name: 'Suiho', pos: 'M', level: 40, vision: 100, passing: 90, defence: 50, active: true, present: false },
+                { id: 17, name: 'Jussi H.', pos: 'M', level: 60, vision: 50, passing: 50, defence: 30, active: true, present: false },
+                { id: 18, name: 'Mikko E.', pos: 'M', level: 70, vision: 90, passing: 80, defence: 70, active: true, present: false },
+                { id: 19, name: 'Ralla', pos: 'D', level: 40, vision: 70, passing: 90, defence: 80, active: true, present: false },
+                { id: 20, name: 'Risto P.', pos: 'D', level: 20, vision: 30, passing: 30, defence: 60, active: false, present: false },
+                { id: 21, name: 'Tasi', pos: 'M', level: 70, vision: 50, passing: 60, defence: 60, active: false, present: false },
+                { id: 22, name: 'Timo J.', pos: 'D', level: 90, vision: 80, passing: 100, defence: 100, active: true, present: false },
+                { id: 23, name: 'Jampe', pos: 'D', level: 60, vision: 70, passing: 60, defence: 90, active: true, present: false },
+                { id: 24, name: 'Jokke', pos: 'D', level: 80, vision: 50, passing: 70, defence: 70, active: true, present: false },
+                { id: 25, name: 'Hati', pos: 'M', level: 40, vision: 60, passing: 40, defence: 60, active: true, present: false },
+                { id: 26, name: 'Tero', pos: 'F', level: 30, vision: 30, passing: 30, defence: 10, active: true, present: false },
+                { id: 27, name: 'Matti M.', pos: 'F', level: 20, vision: 70, passing: 30, defence: 10, active: true, present: false },
+                { id: 28, name: 'Hannu S.', pos: 'D', level: 50, vision: 50, passing: 50, defence: 80, active: true, present: false },
+                { id: 29, name: 'Jooa', pos: 'M', level: 100, vision: 100, passing: 100, defence: 80, active: false, present: false },
+                { id: 30, name: 'Juusa', pos: 'M', level: 100, vision: 100, passing: 100, defence: 80, active: false, present: false },
+                { id: 31, name: 'Niki', pos: 'M', level: 100, vision: 80, passing: 100, defence: 60, active: false, present: false },
+                { id: 32, name: 'Luca', pos: 'M', level: 70, vision: 70, passing: 60, defence: 60, active: false, present: false },
+                { id: 33, name: 'Kille', pos: 'F', level: 30, vision: 50, passing: 40, defence: 10, active: true, present: false },
+                { id: 34, name: 'Keijo', pos: 'D', level: 20, vision: 30, passing: 30, defence: 90, active: false, present: false },
+                { id: 35, name: 'Jussi N.', pos: 'D', level: 90, vision: 60, passing: 70, defence: 90, active: true, present: false },
+                { id: 36, name: 'Jouni T.', pos: 'F', level: 40, vision: 80, passing: 60, defence: 20, active: true, present: false },
+                { id: 37, name: 'Markus', pos: 'M', level: 50, vision: 100, passing: 100, defence: 10, active: false, present: false },
+                { id: 38, name: 'Ana', pos: 'M', level: 10, vision: 70, passing: 30, defence: 10, active: false, present: false },
+                { id: 39, name: 'Manlio', pos: 'M', level: 70, vision: 30, passing: 30, defence: 70, active: false, present: false },
+            ];
+        }
+
+        let players = JSON.parse(localStorage.getItem('treenijaot_players') || 'null') || getDefaultPlayers();
+
+        let nextId = Math.max(...players.map(p => p.id)) + 1;
+        let editingId = null;
+        let currentTeams = null;
+        let vestedPlayers = new Set();
+        let showPercents = localStorage.getItem('treenijaot_showpercents') === 'true';
+        //let useVision = localStorage.getItem('treenijaot_usevision') === 'true';
+        let useWeighting = localStorage.getItem('treenijaot_useweighting') === 'true';
+        //let prioritizeMovement = localStorage.getItem('treenijaot_priomove') === 'true';
+        let showCommentary = localStorage.getItem('treenijaot_showcommentary') === 'true';
+        let bigFont = localStorage.getItem('treenijaot_bigfont') === 'true';
+        let showDebug = localStorage.getItem('treenijaot_showdebug') === 'true';
+
+        function save() {
+            localStorage.setItem('treenijaot_players', JSON.stringify(players));
+        }
+
+        function activePlayers() {
+            return players.filter(p => p.active);
+        }
+
+        function presentPlayers() {
+            return players.filter(p => p.active && p.present);
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach((t, i) => {
+                t.classList.toggle('active', ['attendance', 'teams', 'manage'][i] === tab);
+            });
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById('view-' + tab).classList.add('active');
+            if (tab === 'attendance') renderAttendance();
+            if (tab === 'teams') renderTeamsView();
+            if (tab === 'manage') renderManage();
+            if (tab === 'manage') {
+                const uw = document.getElementById('useWeightingToggle');
+                if (uw) {
+                    uw.checked = useWeighting;
+                    document.getElementById('useWeightingLabel').textContent = 'Käytä 100% pelaajien painotusta: ' + (useWeighting ? 'Kyllä' : 'Ei');
+                }
+                //const cv = document.getElementById('useVisionToggle');
+                //if (cv) {
+                //    cv.checked = useVision;
+                //    document.getElementById('useVisionLabel').textContent = 'Pelinäkemys jaoissa: ' + (useVision ? 'Kyllä' : 'Ei');
+                //}
+                //const pm = document.getElementById('prioritizeMovementToggle');
+                //if (pm) {
+                //    pm.checked = prioritizeMovement;
+                //    document.getElementById('prioritizeMovementLabel').textContent = 'Painota jaoissa liikettä: ' + (prioritizeMovement ? 'Kyllä' : 'Ei');
+                //}
+                const cc = document.getElementById('showCommentaryToggle');
+                if (cc) {
+                    cc.checked = showCommentary;
+                    document.getElementById('showCommentaryLabel').textContent = 'Näytä avainkohdat: ' + (showCommentary ? 'Kyllä' : 'Ei');
+                }
+                const bf = document.getElementById('bigFontToggle');
+                if (bf) {
+                    bf.checked = bigFont;
+                    document.getElementById('bigFontLabel').textContent = 'Isompi kirjainkoko: ' + (bigFont ? 'Kyllä' : 'Ei');
+                }
+                const sd = document.getElementById('showDebugToggle');
+                if (sd) {
+                    sd.checked = showDebug;
+                    document.getElementById('showDebugLabel').textContent = 'Näytä debug-arvot: ' + (showDebug ? 'Kyllä' : 'Ei');
+                }
+            }
+        }
+
+        function clearAttendance() {
+            players.forEach(p => p.present = false);
+            save();
+            currentTeams = null;
+            document.getElementById('teamsResult').innerHTML = '';
+            renderAttendance();
+        }
+
+        // --- ATTENDANCE ---
+        function renderAttendance() {
+            const list = document.getElementById('attendanceList');
+            const active = activePlayers();
+
+            const groups = { D: [], M: [], F: [] };
+            active.forEach(p => groups[p.pos].push(p));
+
+            const posOrder = ['D', 'M', 'F'];
+            let html = '';
+            posOrder.forEach(pos => {
+                if (!groups[pos].length) return;
+                html += `<div class="section-label">${POS_PLURAL[pos]}</div>`;
+                groups[pos].forEach(p => {
+                    html += `
+                            <div class="player-card${p.present ? ' present' : ''}" onclick="togglePresent(${p.id})">
+                              <div class="check-circle">${p.present ? '✓' : ''}</div>
+                              <div class="player-info">
+                                <div class="player-name">${p.name}</div>
+                                <div class="player-meta">
+                                  <span class="pos-badge pos-${pos}">${POS_SHORT[pos]}</span>
+                                </div>
+                              </div>
+                            </div>`;
+                });
+            });
+
+            if (!active.length) {
+                html = `<div class="empty-state"><span class="emoji">👥</span>Ei aktiivisia pelaajia.<br>Lisää pelaajia Hallinta-välilehdellä.</div>`;
+            }
+
+            list.innerHTML = html;
+            updateBadge();
+        }
+
+        function togglePresent(id) {
+            const p = players.find(x => x.id === id);
+            if (p) {
+                p.present = !p.present;
+                save();
+                renderAttendance();
+                const present = presentPlayers();
+                if (!currentTeams && present.length >= 2) {
+                    currentTeams = balancedSplit([...present]);
+                } else if (currentTeams) {
+                    currentTeams = balancedSplit([...present]);
+                }
+            }
+        }
+
+        function updateBadge() {
+            const n = presentPlayers().length;
+            document.getElementById('presentBadge').textContent = n + ' paikalla';
+        }
+
+        // --- TEAMS ---
+        function renderTeamsView() {
+            const present = presentPlayers();
+            document.getElementById('teamsPresent').textContent = present.length + ' pelaajaa';
+            document.getElementById('splitBtn').disabled = present.length < 2;
+            if (currentTeams) renderTeamBoxes(currentTeams);
+        }
+
+        function playerScore(p) {
+            //if (!useVision) return p.level;
+            const v = p.vision ?? p.level;
+            const s = p.passing ?? p.level;
+            const d = p.defence ?? p.level;
+            //return prioritizeMovement
+            //    ? Math.round(0.9 * p.level + 0.1 * v)
+            //    : Math.round(0.4 * p.level + 0.6 * v);
+
+            return Math.round(0.4 * p.level + 0.35 * s + 0.125 * v + 0.125 * d);
+
+
+        }
+
+        function balancedSplit(present) {
+            const groups = { D: [], M: [], F: [] };
+            present.forEach(p => groups[p.pos].push(p));
+
+            let teamA = [], teamB = [];
+            let sumA = 0, sumB = 0;
+
+            ['D', 'M', 'F'].forEach(pos => {
+                const sorted = groups[pos].sort((a, b) => playerScore(b) - playerScore(a));
+                sorted.forEach(p => {
+                    const score = playerScore(p);
+                    if (sumA <= sumB) { teamA.push(p); sumA += score; }
+                    else { teamB.push(p); sumB += score; }
+                });
+            });
+
+            return { teamA, teamB, sumA, sumB };
+        }
+
+        function toggleVest(id) {
+            if (vestedPlayers.has(id)) vestedPlayers.delete(id);
+            else vestedPlayers.add(id);
+            renderTeamBoxes(currentTeams);
+        }
+
+        function splitTeams() {
+            const present = presentPlayers();
+            if (present.length < 2) return;
+            vestedPlayers = new Set();
+            currentTeams = balancedSplit([...present]);
+            renderTeamBoxes(currentTeams);
+        }
+
+        function winScore(team, otherTeam) {
+            if (!team.length) return 0;
+            const fullMids = team.filter(p => p.pos === 'M' && playerScore(p) === 100).length / team.length;
+            const fullDefs = team.filter(p => p.pos === 'D' && playerScore(p) === 100).length / team.length;
+            const avg = team.reduce((s, p) => s + playerScore(p), 0) / team.length;
+            const sizeDiff = Math.max(0, team.length - otherTeam.length);
+            const playerCount = team.length + otherTeam.length;
+            let extraBonus = 0;
+            if (sizeDiff > 0 && playerCount <= 20) {
+                const sorted = [...team].sort((a, b) => playerScore(a) - playerScore(b));
+                for (let i = 0; i < sizeDiff; i++) {
+                    extraBonus += playerScore(sorted[i]); // double their score = add it once extra
+                }
+            }
+
+            if (useWeighting)
+                return fullMids * 100 + fullDefs * 100 + avg + extraBonus;
+
+            return avg + extraBonus;
+            //return fullMids * 400 + fullDefs * 300 + avg + extraBonus;
+        }
+
+        function generateCommentary(teamA, teamB) {
+            const allPlayers = [...teamA, ...teamB];
+
+            // Weighted random pick: higher playerScore = more likely, but lower scores get occasional pick too
+            function weightedPick(pool) {
+                if (!pool.length) return null;
+                const weights = pool.map(p => {
+                    const s = playerScore(p);
+                    // 80% chance weight by score, 20% chance flat (gives underdogs a shot)
+                    return Math.random() < 0.8 ? s : 50;
+                });
+                const total = weights.reduce((a, b) => a + b, 0);
+                let r = Math.random() * total;
+                for (let i = 0; i < pool.length; i++) {
+                    r -= weights[i];
+                    if (r <= 0) return pool[i];
+                }
+                return pool[pool.length - 1];
+            }
+
+            const mids = allPlayers.filter(p => p.pos === 'M');
+            const defs = allPlayers.filter(p => p.pos === 'D');
+            const fwds = allPlayers.filter(p => p.pos === 'F');
+
+            const midTemplates = (n) => [
+                `Riittääkö <em>${n}</em>:n pelinrakennustaito?`,
+                `Kuinka paljon <em>${n}</em> vaikuttaa pelin tempoon?`,
+                `Nähdäänkö <em>${n}</em>:lta yllättävä kaukolaukaus?`,
+                `Osuvatko <em>${n}</em>:n syötöt tänään kohdalleen?`,
+                `Saneleeko <em>${n}</em> joukkueensa pelin rytmin tänään?`,
+                `<em>${n}</em>:lla on iso vastuu puolustuksen ja hyökkäyksen linkittämisessä.`,
+                `Riittääkö <em>${n}</em>:n kunto?`,
+                `Osuvatko <em>${n}</em>:n keskitykset kohdalleen?`,
+                `Edistävätkö <em>${n}</em>:n syötöt peliä?`,
+                `Malttaako <em>${n}</em> syöttää helppoja syöttöjä?`,
+                `Sortuuko <em>${n}</em> kikkailuun?`,
+            ];
+            const defTemplates = (n) => [
+                `Pitääkö <em>${n}</em>:n puolustus?`,
+                `Onko <em>${n}</em> mies paikallaan kun vastustaja iskee?`,
+                `Kuinka tiukka on <em>${n}</em>:n taklaus tänään?`,
+                `Kestääkö <em>${n}</em>:n pää paineen alla?`,
+                `Onnistuuko <em>${n}</em> käynnistämään hyökkäykset alhaalta?`,
+            ];
+            const fwdTemplates = (n) => [
+                `Onko <em>${n}</em>:n maalijyvä kohdallaan?`,
+                `Löytääkö <em>${n}</em> tilaa puolustuksen selustasta?`,
+                `Iskeekö <em>${n}</em> juuri oikealla hetkellä?`,
+                `Onko <em>${n}</em>:n viimeistely terässä?`,
+                `Pystytäänkö <em>${n}</em>:n taitoa käyttämään hyväksi hyökkäyspäässä?`,
+                `Riittääkö <em>${n}</em>:n terävyys?`,
+                `Löytyykö <em>${n}</em>:lta tappajan vaistoa?`,
+            ];
+            const randomComments = [
+                'Onko pallossa oikea paine?',
+                'Onko liivit pesty?',
+                'Kumpi joukkue osaa pelata vahvuuksillaan?',
+                'Kumpi joukkue löytää rytminsä nopeammin?',
+                'Kuka tarjoaa kahvit Hakasella?',
+                'Paras joukkue ei aina voita — mutta lähes aina.',
+                'Noudattavatko molemmat joukkueet pelisuunnitelmaansa?',
+                'Riittääkö suihkuissa lämmin vesi kaikille?',
+            ];
+
+            // Player-specific comments — only shown if that player is present
+            const presentNames = new Set(presentPlayers().map(p => p.name));
+            const playerSpecificComments = [
+                { player: 'Apa', text: 'Keksiikö <em>Apa</em> omia sääntöjään?' },
+                { player: 'Apa', text: 'Yrittääkö <em>Apa</em> maalia puolesta kentästä?' },
+                { player: 'Hanski M.', text: 'Seisooko <em>Hanski M.</em> taas muurina maaliviivalla?' },
+                { player: 'Ralla', text: '<em>Ralla</em> on vaarallinen kulmapotkutilanteissa.' },
+                { player: 'Suiho', text: 'Potkiiko <em>Suiho</em> taas kaikkea mikä liikkuu jaloille?' },
+                { player: 'Suiho', text: 'Pujotteleeko <em>Suiho</em> taas koko kentän läpi näytöstyyliin?' },
+                { player: 'Suiho', text: 'Onko <em>Suiho</em> muistanut venytellä?' },
+                { player: 'Ari', text: 'Onko <em>Ari</em> jälleen kerran pitelemätön keskityspalloissa?' },
+                { player: 'Kille', text: 'Pystytäänkö <em>Kille</em>:n pääpelitaitoa hyödyntämään?' },
+                { player: 'Matti M.', text: 'Ratkaiseeko <em>Matti M.</em>:n kokemus pelin?' },
+            ].filter(c => presentNames.has(c.player));
+
+            function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+            const lines = [];
+            const used = new Set();
+
+            function addPlayerLine(pool, templates) {
+                if (!pool.length) return false;
+                let attempts = 0;
+                while (attempts++ < 10) {
+                    const p = weightedPick(pool);
+                    if (!used.has(p.id)) {
+                        used.add(p.id);
+                        lines.push(pick(templates(p.name)));
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            function addSpecificComment() {
+                if (!playerSpecificComments.length) return false;
+                const c = playerSpecificComments[Math.floor(Math.random() * playerSpecificComments.length)];
+                lines.push(c.text);
+                return true;
+            }
+
+            // Build 3 lines: mix of player comments, specific comments and random quips
+            // ~40% chance to include a player-specific comment if any are available
+            const useSpecific = playerSpecificComments.length > 0 && Math.random() < 0.4;
+
+            const slots = [
+                () => addPlayerLine(mids.length ? mids : allPlayers, midTemplates),
+                () => addPlayerLine(fwds.length ? fwds : allPlayers, fwdTemplates),
+                () => addPlayerLine(defs.length ? defs : allPlayers, defTemplates),
+                () => { lines.push(pick(randomComments)); return true; },
+                () => addSpecificComment(),
+            ];
+
+            // Shuffle slot order, always include at least one random or specific comment
+            const order = useSpecific
+                ? [slots[0], slots[4], slots[Math.random() < 0.5 ? 1 : 3]]
+                : (Math.random() < 0.5 ? [slots[0], slots[3], slots[1]] : [slots[1], slots[0], slots[3]]);
+
+            order.forEach(fn => fn());
+
+            // Pad to 3 if needed
+            while (lines.length < 3) lines.push(pick(randomComments));
+
+            return lines.slice(0, 3);
+        }
+
+        function renderTeamBoxes({ teamA, teamB, sumA, sumB }) {
+            const avgA = teamA.length ? Math.round(sumA / teamA.length) : 0;
+            const avgB = teamB.length ? Math.round(sumB / teamB.length) : 0;
+
+            const posOrder = { D: 0, M: 1, F: 2 };
+            const sortTeam = (team) => [...team].sort((a, b) =>
+                posOrder[a.pos] - posOrder[b.pos] || a.name.localeCompare(b.name, 'fi')
+            );
+
+            const playerRow = (p, fromTeam) => {
+                const arrow = fromTeam === 'A' ? '←' : '→';
+                const isVested = fromTeam === 'B' && vestedPlayers.has(p.id);
+                const vestClick = fromTeam === 'B' ? `onclick="toggleVest(${p.id})"` : '';
+                const vestClass = isVested ? ' vest-given' : '';
+                const vestCursor = fromTeam === 'B' ? 'cursor:pointer;' : '';
+                const debugBadge = showDebug
+                    ? `<span style="font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--yellow);font-weight:700;flex-shrink:0;">${playerScore(p)}</span>`
+                    : '';
+                return `<div class="team-player${vestClass}" ${vestClick} style="${vestCursor}">
+                          <span class="pos-badge pos-${p.pos}">${POS_SHORT[p.pos]}</span>
+                          <span class="team-player-name">${p.name}</span>
+                          ${debugBadge}
+                          <button class="move-btn" onclick="event.stopPropagation();movePlayer(${p.id}, '${fromTeam}')" title="Siirrä toiseen joukkueeseen">${arrow}</button>
+                        </div>`;
+            };
+
+            const sA = winScore(teamA, teamB), sB = winScore(teamB, teamA);
+            const total = sA + sB || 1;
+            const pctA = Math.round(sA / total * 100);
+            const pctB = 100 - pctA;
+
+            const defScoreA = teamA.filter(p => p.pos === 'D').reduce((s, p) => s + playerScore(p), 0);
+            const midScoreA = teamA.filter(p => p.pos === 'M').reduce((s, p) => s + playerScore(p), 0);
+            const fwdScoreA = teamA.filter(p => p.pos === 'F').reduce((s, p) => s + playerScore(p), 0);
+            const defScoreB = teamB.filter(p => p.pos === 'D').reduce((s, p) => s + playerScore(p), 0);
+            const midScoreB = teamB.filter(p => p.pos === 'M').reduce((s, p) => s + playerScore(p), 0);
+            const fwdScoreB = teamB.filter(p => p.pos === 'F').reduce((s, p) => s + playerScore(p), 0);
+
+            const totalDef = defScoreA + defScoreB || 1;
+            const totalMid = midScoreA + midScoreB || 1;
+            const totalFwd = fwdScoreA + fwdScoreB || 1;
+
+            const pctDefA = Math.round(defScoreA / totalDef * 100);
+            const pctDefB = 100 - pctDefA;
+
+            const pctMidA = Math.round(midScoreA / totalMid * 100);
+            const pctMidB = 100 - pctMidA;
+
+            const pctFwdA = Math.round(fwdScoreA / totalFwd * 100);
+            const pctFwdB = 100 - pctFwdA;
+
+            const debugB = showDebug ? `<span style="font-size:10px;opacity:0.6;font-weight:600;">${Math.round(sB)}</span>` : '';
+            const debugA = showDebug ? `<span style="font-size:10px;opacity:0.6;font-weight:600;">${Math.round(sA)}</span>` : '';
+
+            const commentary = generateCommentary(teamA, teamB);
+
+            document.getElementById('teamsResult').innerHTML = `
+                        <div class="teams-grid">
+                          <div class="team-box team-b">
+                            <div class="team-header">
+                              <div>
+                                Liivilliset ${debugB}
+                              </div>
+                              <span class="team-strength">Ø ${avgB}%</span>
+                            </div>
+                            <div class="team-players">${sortTeam(teamB).map(p => playerRow(p, 'B')).join('')}</div>
+                          </div>
+                          <div class="team-box team-a">
+                            <div class="team-header">
+                              <div>
+                                Liivittömät ${debugA}
+                              </div>
+                              <span class="team-strength">Ø ${avgA}%</span>
+                            </div>
+                            <div class="team-players">${sortTeam(teamA).map(p => playerRow(p, 'A')).join('')}</div>
+                          </div>
+                        </div>
+                        <div class="prediction">
+                          <div class="prediction-title">⚡ Voittoennuste</div>
+                          <div class="prediction-bar-wrap">
+                            <div class="prediction-bar-b" style="width:${pctB}%">
+                              <span class="prediction-bar-pct">${pctB > 12 ? pctB + '%' : ''}</span>
+                            </div>
+                            <div class="prediction-bar-a" style="width:${pctA}%">
+                              <span class="prediction-bar-pct">${pctA > 12 ? pctA + '%' : ''}</span>
+                            </div>
+                          </div>
+                          <div class="prediction-labels">
+                            <div class="prediction-label prediction-label-b">
+                              <span style="font-size:18px;font-weight:900;">${pctB}%</span>
+                              <span class="prediction-name">Liivilliset</span>
+                            </div>
+                            <div class="prediction-label prediction-label-a">
+                              <span style="font-size:18px;font-weight:900;">${pctA}%</span>
+                              <span class="prediction-name">Liivittömät</span>
+                            </div>
+                          </div>
+                          <div class="prediction-positions">
+                            <div class="prediction-title">Pelipaikoittain</div>
+                            <div class="prediction-positions-label">Puolustus</div>
+                            <div class="prediction-bar-wrap positions">
+                              <div class="prediction-bar-b positions" style="width:${pctDefB}%">
+                                <span class="prediction-bar-pct">${pctDefB > 12 ? pctDefB + '%' : ''}</span>
+                              </div>
+                              <div class="prediction-bar-a positions" style="width:${pctDefA}%">
+                                <span class="prediction-bar-pct">${pctDefA > 12 ? pctDefA + '%' : ''}</span>
+                              </div>
+                            </div>
+                            <div class="prediction-positions-label">Keskikenttä</div>
+                            <div class="prediction-bar-wrap positions">
+                              <div class="prediction-bar-b positions" style="width:${pctMidB}%">
+                                <span class="prediction-bar-pct">${pctMidB > 12 ? pctMidB + '%' : ''}</span>
+                              </div>
+                              <div class="prediction-bar-a positions" style="width:${pctMidA}%">
+                                <span class="prediction-bar-pct">${pctMidA > 12 ? pctMidA + '%' : ''}</span>
+                              </div>
+                            </div>
+                            <div class="prediction-positions-label">Hyökkäys</div>
+                            <div class="prediction-bar-wrap positions">
+                              <div class="prediction-bar-b positions" style="width:${pctFwdB}%">
+                                <span class="prediction-bar-pct">${pctFwdB > 12 ? pctFwdB + '%' : ''}</span>
+                              </div>
+                              <div class="prediction-bar-a positions" style="width:${pctFwdA}%">
+                                <span class="prediction-bar-pct">${pctFwdA > 12 ? pctFwdA + '%' : ''}</span>
+                              </div>
+                            </div>
+                          </div>
+                          ${showCommentary ? `<div class="match-commentary">
+                            <div class="commentary-title">🎙 Avainkohtia</div>
+                            ${commentary.map(c => `<div class="commentary-item">${c}</div>`).join('')}
+                          </div>` : ''}
+                        </div>
+                        <button class="shuffle-btn" onclick="shuffleTeams()">🔀 Sekoita uudelleen</button>
+                      `;
+        }
+
+        function movePlayer(id, fromTeam) {
+            if (!currentTeams) return;
+            const { teamA, teamB } = currentTeams;
+            if (fromTeam === 'A') {
+                const idx = teamA.findIndex(p => p.id === id);
+                if (idx === -1) return;
+                teamB.push(...teamA.splice(idx, 1));
+            } else {
+                const idx = teamB.findIndex(p => p.id === id);
+                if (idx === -1) return;
+                teamA.push(...teamB.splice(idx, 1));
+            }
+            currentTeams.sumA = teamA.reduce((s, p) => s + p.level, 0);
+            currentTeams.sumB = teamB.reduce((s, p) => s + p.level, 0);
+            renderTeamBoxes(currentTeams);
+        }
+
+        function shuffleTeams() {
+            // Shuffle within each position group, then balance
+            const present = presentPlayers();
+            const groups = { D: [], M: [], F: [] };
+            present.forEach(p => groups[p.pos].push(p));
+            ['D', 'M', 'F'].forEach(pos => groups[pos].sort(() => Math.random() - 0.5));
+            const shuffled = [...groups.D, ...groups.M, ...groups.F];
+            vestedPlayers = new Set();
+            currentTeams = balancedSplit(shuffled);
+            renderTeamBoxes(currentTeams);
+        }
+
+        //function togglePrioritizeMovement() {
+        //    prioritizeMovement = document.getElementById('prioritizeMovementToggle').checked;
+        //    localStorage.setItem('treenijaot_priomove', prioritizeMovement);
+        //    document.getElementById('prioritizeMovementLabel').textContent = 'Painota jaoissa liikettä: ' + (prioritizeMovement ? 'Kyllä' : 'Ei');
+        //    if (currentTeams) renderTeamBoxes(currentTeams);
+        //}
+
+        //function toggleUseVision() {
+        //    useVision = document.getElementById('useVisionToggle').checked;
+        //    localStorage.setItem('treenijaot_usevision', useVision);
+        //    document.getElementById('useVisionLabel').textContent = 'Pelinäkemys jaoissa: ' + (useVision ? 'Kyllä' : 'Ei');
+        //    if (currentTeams) {
+        //        renderTeamBoxes(currentTeams);
+        //    }
+        //}
+
+        function toggleUseWeighting() {
+            useWeighting = document.getElementById('useWeightingToggle').checked;
+            localStorage.setItem('treenijaot_useweighting', useWeighting);
+            document.getElementById('useWeightingLabel').textContent = 'Käytä 100% pelaajien painotusta: ' + (useWeighting ? 'Kyllä' : 'Ei');
+            if (currentTeams) {
+                renderTeamBoxes(currentTeams);
+            }
+        }
+
+        function toggleShowDebug() {
+            showDebug = document.getElementById('showDebugToggle').checked;
+            localStorage.setItem('treenijaot_showdebug', showDebug);
+            document.getElementById('showDebugLabel').textContent = 'Näytä debug-arvot: ' + (showDebug ? 'Kyllä' : 'Ei');
+            if (currentTeams) renderTeamBoxes(currentTeams);
+        }
+
+        function toggleBigFont() {
+            bigFont = document.getElementById('bigFontToggle').checked;
+            localStorage.setItem('treenijaot_bigfont', bigFont);
+            document.getElementById('bigFontLabel').textContent = 'Isompi kirjainkoko: ' + (bigFont ? 'Kyllä' : 'Ei');
+            document.body.classList.toggle('big-font', bigFont);
+        }
+
+        function toggleShowCommentary() {
+            showCommentary = document.getElementById('showCommentaryToggle').checked;
+            localStorage.setItem('treenijaot_showcommentary', showCommentary);
+            document.getElementById('showCommentaryLabel').textContent = 'Näytä avainkohdat: ' + (showCommentary ? 'Kyllä' : 'Ei');
+            if (currentTeams) renderTeamBoxes(currentTeams);
+        }
+
+        function toggleShowPercents() {
+            showPercents = document.getElementById('showPercentsToggle').checked;
+            localStorage.setItem('treenijaot_showpercents', showPercents);
+            document.getElementById('showPercentsLabel').textContent = 'Näytä prosentit: ' + (showPercents ? 'Kyllä' : 'Ei');
+            renderAttendance();
+        }
+
+        // --- MANAGE ---
+        function renderManage() {
+            const list = document.getElementById('manageList');
+            const countEl = document.getElementById('playerCount');
+            if (countEl) countEl.textContent = players.length + ' pelaajaa';
+            if (!players.length) {
+                list.innerHTML = `<div class="empty-state"><span class="emoji">👤</span>Ei pelaajia.</div>`;
+                return;
+            }
+            const sorted = [...players].sort((a, b) => a.name.localeCompare(b.name, 'fi'));
+            list.innerHTML = sorted.map(p => `
+                        <div class="manage-card" id="mc-${p.id}">
+                          <div class="manage-card-top">
+                            <div class="player-info">
+                              <div class="manage-name">${p.name}</div>
+                              <div class="player-meta">
+                                <span class="pos-badge pos-${p.pos}">${POS_SHORT[p.pos]}</span>
+                                <span style="font-size:12px;color:var(--accent);font-weight:600;">${p.level}%</span>
+                              </div>
+                            </div>
+                            <div class="manage-actions">
+                              <button class="icon-btn edit" onclick="openEdit(${p.id})">✎</button>
+                              <button class="icon-btn danger" onclick="deletePlayer(${p.id})">✕</button>
+                            </div>
+                          </div>
+                          <div class="active-toggle">
+                            <label class="toggle">
+                              <input type="checkbox" ${p.active ? 'checked' : ''} onchange="toggleActive(${p.id})">
+                              <div class="toggle-slider"></div>
+                            </label>
+                            <span class="toggle-label">${p.active ? 'Aktiivinen' : 'Ei aktiivinen'}</span>
+                          </div>
+                        </div>
+                      `).join('');
+        }
+
+        function toggleActive(id) {
+            const p = players.find(x => x.id === id);
+            if (p) {
+                p.active = !p.active;
+                if (!p.active) p.present = false;
+                save();
+                const label = document.querySelector(`#mc-${id} .toggle-label`);
+                if (label) label.textContent = p.active ? 'Aktiivinen' : 'Ei aktiivinen';
+                updateBadge();
+            }
+        }
+
+        function deletePlayer(id) {
+            if (!confirm('Poistetaanko pelaaja?')) return;
+            players = players.filter(p => p.id !== id);
+            save();
+            renderManage();
+            updateBadge();
+        }
+
+        function addPlayer() {
+            const name = document.getElementById('newName').value.trim();
+            if (!name) { document.getElementById('newName').focus(); return; }
+            const pos = document.getElementById('newPos').value;
+            const level = parseInt(document.getElementById('newLevel').value);
+            const vision = parseInt(document.getElementById('newVision').value);
+            const passing = parseInt(document.getElementById('newPassing').value);
+            const defence = parseInt(document.getElementById('newDefence').value);
+            players.push({ id: nextId++, name, pos, level, vision, passing, defence, active: true, present: false });
+            save();
+            document.getElementById('newName').value = '';
+            document.getElementById('newLevel').value = 70;
+            document.getElementById('newLevelVal').textContent = '70';
+            document.getElementById('newVision').value = 70;
+            document.getElementById('newVisionVal').textContent = '70';
+            document.getElementById('newPassing').value = 70;
+            document.getElementById('newPassingVal').textContent = '70';
+            document.getElementById('newDefence').value = 70;
+            document.getElementById('newDefenceVal').textContent = '70';
+            renderManage();
+        }
+
+        // sync range display
+        document.getElementById('newLevel').addEventListener('input', function () {
+            document.getElementById('newLevelDisp').textContent = this.value + '%';
+        });
+        document.getElementById('editLevel').addEventListener('input', function () {
+            document.getElementById('editLevelDisp').textContent = this.value + '%';
+        });
+        document.getElementById('newVision').addEventListener('input', function () {
+            document.getElementById('newVisionDisp').textContent = this.value + '%';
+        });
+        document.getElementById('editVision').addEventListener('input', function () {
+            document.getElementById('editVisionDisp').textContent = this.value + '%';
+        });
+        document.getElementById('newPassing').addEventListener('input', function () {
+            document.getElementById('newPassingDisp').textContent = this.value + '%';
+        });
+        document.getElementById('editPassing').addEventListener('input', function () {
+            document.getElementById('editPassingDisp').textContent = this.value + '%';
+        });
+        document.getElementById('newDefence').addEventListener('input', function () {
+            document.getElementById('newDefenceDisp').textContent = this.value + '%';
+        });
+        document.getElementById('editDefence').addEventListener('input', function () {
+            document.getElementById('editDefenceDisp').textContent = this.value + '%';
+        });
+
+        function openEdit(id) {
+            const p = players.find(x => x.id === id);
+            if (!p) return;
+            editingId = id;
+            document.getElementById('editName').value = p.name;
+            document.getElementById('editPos').value = p.pos;
+            document.getElementById('editLevel').value = p.level;
+            document.getElementById('editLevelVal').textContent = p.level;
+            document.getElementById('editLevelDisp').textContent = p.level + '%';
+            const vision = p.vision ?? p.level;
+            document.getElementById('editVision').value = vision;
+            document.getElementById('editVisionVal').textContent = vision;
+            document.getElementById('editVisionDisp').textContent = vision + '%';
+            const passing = p.passing ?? p.level;
+            document.getElementById('editPassing').value = passing;
+            document.getElementById('editPassingVal').textContent = passing;
+            document.getElementById('editPassingDisp').textContent = passing + '%';
+            const defence = p.defence ?? p.level;
+            document.getElementById('editDefence').value = defence;
+            document.getElementById('editDefenceVal').textContent = defence;
+            document.getElementById('editDefenceDisp').textContent = defence + '%';
+            document.getElementById('editModal').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').classList.remove('open');
+            editingId = null;
+        }
+
+        function saveEdit() {
+            const p = players.find(x => x.id === editingId);
+            if (!p) return;
+            const name = document.getElementById('editName').value.trim();
+            if (!name) return;
+            p.name = name;
+            p.pos = document.getElementById('editPos').value;
+            p.level = parseInt(document.getElementById('editLevel').value);
+            p.vision = parseInt(document.getElementById('editVision').value);
+            p.passing = parseInt(document.getElementById('editPassing').value);
+            p.defence = parseInt(document.getElementById('editDefence').value);
+            save();
+            closeModal();
+            renderManage();
+        }
+
+        document.getElementById('editModal').addEventListener('click', function (e) {
+            if (e.target === this) closeModal();
+        });
+
+        function clearStorage() {
+            if (!confirm('Tämä palauttaa oletuspelaajat ja poistaa kaikki muutokset. Oletko varma?')) return;
+            localStorage.removeItem('treenijaot_players');
+            players = getDefaultPlayers();
+            nextId = Math.max(...players.map(p => p.id)) + 1;
+            currentTeams = null;
+            renderManage();
+            renderAttendance();
+        }
+
+        // INIT
+        if (bigFont) document.body.classList.add('big-font');
+        renderAttendance();
+        // sync toggle on first load if manage view is somehow active
+    </script>
+</body>
+</html>
