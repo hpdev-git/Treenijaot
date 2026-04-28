@@ -743,21 +743,6 @@
                 margin-bottom: 10px;
             }
 
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            background: var(--surface2);
-            border-radius: 8px;
-            padding: 8px 12px;
-            margin-bottom: 8px;
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-            .info-row strong {
-                color: var(--text);
-            }
-
         .clear-btn {
             width: 100%;
             padding: 12px;
@@ -852,11 +837,11 @@
             min-width: 0;
             overflow: hidden;
         }
-/*
-            .prediction-bar-a.positions {
+
+            /*.prediction-bar-a.positions {
                 background-image: none, linear-gradient(90deg, #25518f, var(--team-a-accent));
-            }
-*/
+            }*/
+
         .prediction-bar-b {
             background: linear-gradient(90deg, #c0392b, var(--team-b-accent));
             display: flex;
@@ -867,11 +852,11 @@
             min-width: 0;
             overflow: hidden;
         }
-/*
-            .prediction-bar-b.positions {
+
+            /*.prediction-bar-b.positions {
                 background-image: none, linear-gradient(90deg, #932a20, var(--team-b-accent));
-            }
-*/
+            }*/
+
         .prediction-bar-pct {
             font-family: 'Barlow Condensed', sans-serif;
             font-weight: 900;
@@ -989,7 +974,7 @@
             <h1>⚽ ILVES 60+ <span>TREENIJAOT</span></h1>
             <div>
                 <div class="present-badge" id="presentBadge">0 paikalla</div>
-                <span class="version">v.2026.04.27(1)</span>
+                <span class="version">v.2026.04.26(1)</span>
             </div>
         </div>
         <div class="tabs">
@@ -1007,10 +992,6 @@
 
     <!-- TEAMS VIEW -->
     <div class="view" id="view-teams">
-        <div class="info-row">
-            <span>Paikalla olevat</span>
-            <strong id="teamsPresent">—</strong>
-        </div>
         <button class="split-btn" id="splitBtn" onclick="splitTeams()">
             ⚽ Tee jaot
         </button>
@@ -1387,24 +1368,158 @@
             return Math.round(0.4 * p.level + 0.35 * s + 0.125 * v + 0.125 * d);
         }
 
+        //function balancedSplit(present) {
+        //    const groups = { D: [], M: [], F: [] };
+        //    present.forEach(p => groups[p.pos].push(p));
+
+        //    let teamA = [], teamB = [];
+        //    let sumA = 0, sumB = 0;
+        //    let pickIndex = 0;
+
+        //    ['D', 'M', 'F'].forEach(pos => {
+        //        const sorted = groups[pos].sort((a, b) => playerScore(b) - playerScore(a));
+
+        //        sorted.forEach(p => {
+        //            const score = playerScore(p);
+
+        //            // Snake Draft kahdelle joukkueelle:
+        //            // 0: A, 1: B, 2: B, 3: A, 4: A, 5: B...
+        //            const pairIndex = Math.floor(pickIndex / 2);
+        //            const isFirstInPair = pickIndex % 2 === 0;
+
+        //            const goesToA =
+        //                pairIndex % 2 === 0
+        //                    ? isFirstInPair
+        //                    : !isFirstInPair;
+
+        //            if (goesToA) {
+        //                teamA.push(p);
+        //                sumA += score;
+        //            } else {
+        //                teamB.push(p);
+        //                sumB += score;
+        //            }
+
+        //            pickIndex++;
+        //        });
+        //    });
+
+        //    return { teamA, teamB, sumA, sumB };
+        //}
+
         function balancedSplit(present) {
             const groups = { D: [], M: [], F: [] };
             present.forEach(p => groups[p.pos].push(p));
 
             let teamA = [], teamB = [];
             let sumA = 0, sumB = 0;
+            let pickIndex = 0;
 
             ['D', 'M', 'F'].forEach(pos => {
                 const sorted = groups[pos].sort((a, b) => playerScore(b) - playerScore(a));
+
                 sorted.forEach(p => {
                     const score = playerScore(p);
-                    if (sumA <= sumB) { teamA.push(p); sumA += score; }
-                    else { teamB.push(p); sumB += score; }
+
+                    const pairIndex = Math.floor(pickIndex / 2);
+                    const isFirstInPair = pickIndex % 2 === 0;
+
+                    const goesToA =
+                        pairIndex % 2 === 0
+                            ? isFirstInPair
+                            : !isFirstInPair;
+
+                    if (goesToA) {
+                        teamA.push(p);
+                        sumA += score;
+                    } else {
+                        teamB.push(p);
+                        sumB += score;
+                    }
+
+                    pickIndex++;
                 });
             });
 
+            function isWithinTenPercent(a, b) {
+                const max = Math.max(a, b);
+                if (max === 0) return true;
+
+                return Math.abs(a - b) / max <= 0.10;
+            }
+
+            function getMiddlePlayers(team) {
+                const sorted = [...team].sort((a, b) => playerScore(a) - playerScore(b));
+
+                // Otetaan keskimmäinen 50% pelaajista, eli vältetään heikoimpia ja vahvimpia.
+                const start = Math.floor(sorted.length * 0.25);
+                const end = Math.ceil(sorted.length * 0.75);
+
+                return sorted.slice(start, end);
+            }
+
+            let attempts = 0;
+            const maxAttempts = 100;
+
+            while (!isWithinTenPercent(sumA, sumB) && attempts < maxAttempts) {
+                const strongerTeam = sumA > sumB ? teamA : teamB;
+                const weakerTeam = sumA > sumB ? teamB : teamA;
+
+                const strongerMiddle = getMiddlePlayers(strongerTeam);
+                const weakerMiddle = getMiddlePlayers(weakerTeam);
+
+                let bestSwap = null;
+                let bestDiff = Math.abs(sumA - sumB);
+
+                strongerMiddle.forEach(strongerPlayer => {
+                    weakerMiddle.forEach(weakerPlayer => {
+                        const strongerScore = playerScore(strongerPlayer);
+                        const weakerScore = playerScore(weakerPlayer);
+
+                        let newSumA = sumA;
+                        let newSumB = sumB;
+
+                        if (sumA > sumB) {
+                            newSumA = sumA - strongerScore + weakerScore;
+                            newSumB = sumB - weakerScore + strongerScore;
+                        } else {
+                            newSumA = sumA - weakerScore + strongerScore;
+                            newSumB = sumB - strongerScore + weakerScore;
+                        }
+
+                        const newDiff = Math.abs(newSumA - newSumB);
+
+                        if (newDiff < bestDiff) {
+                            bestDiff = newDiff;
+                            bestSwap = {
+                                strongerPlayer,
+                                weakerPlayer,
+                                strongerScore,
+                                weakerScore,
+                                newSumA,
+                                newSumB
+                            };
+                        }
+                    });
+                });
+
+                if (!bestSwap) break;
+
+                const strongerIndex = strongerTeam.indexOf(bestSwap.strongerPlayer);
+                const weakerIndex = weakerTeam.indexOf(bestSwap.weakerPlayer);
+
+                strongerTeam[strongerIndex] = bestSwap.weakerPlayer;
+                weakerTeam[weakerIndex] = bestSwap.strongerPlayer;
+
+                sumA = bestSwap.newSumA;
+                sumB = bestSwap.newSumB;
+
+                attempts++;
+            }
+
             return { teamA, teamB, sumA, sumB };
         }
+
 
         function toggleVest(id) {
             if (vestedPlayers.has(id)) vestedPlayers.delete(id);
