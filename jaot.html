@@ -1185,8 +1185,8 @@
             return [
                 { id: 1, name: 'Apa', pos: 'M', level: 90, vision: 100, passing: 100, defence: 80, active: true, present: false, runner: true },
                 { id: 2, name: 'Ari', pos: 'F', level: 80, vision: 50, passing: 60, defence: 40, active: true, present: false, runner: true },
-                { id: 3, name: 'Aku', pos: 'M', level: 80, vision: 90, passing: 90, defence: 70, active: true, present: false, runner: true },
-                { id: 4, name: 'Arto', pos: 'M', level: 100, vision: 50, passing: 80, defence: 70, active: true, present: false, runner: true },
+                { id: 3, name: 'Aku', pos: 'M', level: 80, vision: 90, passing: 90, defence: 60, active: true, present: false, runner: true },
+                { id: 4, name: 'Arto', pos: 'M', level: 100, vision: 50, passing: 70, defence: 60, active: true, present: false, runner: true },
                 { id: 5, name: 'Charlie', pos: 'F', level: 40, vision: 50, passing: 40, defence: 40, active: true, present: false, runner: false },
                 { id: 6, name: 'Eero', pos: 'M', level: 100, vision: 60, passing: 80, defence: 90, active: true, present: false, runner: true },
                 { id: 7, name: 'Ilpo', pos: 'M', level: 100, vision: 60, passing: 100, defence: 20, active: true, present: false, runner: true },
@@ -1201,7 +1201,7 @@
                 { id: 16, name: 'Suiho', pos: 'M', level: 40, vision: 100, passing: 90, defence: 50, active: true, present: false, runner: false },
                 { id: 17, name: 'Jussi H.', pos: 'M', level: 60, vision: 50, passing: 50, defence: 30, active: true, present: false, runner: false },
                 { id: 18, name: 'Mikko E.', pos: 'M', level: 70, vision: 90, passing: 80, defence: 70, active: true, present: false, runner: false },
-                { id: 19, name: 'Ralla', pos: 'D', level: 40, vision: 70, passing: 90, defence: 80, active: true, present: false, runner: false },
+                { id: 19, name: 'Ralla', pos: 'D', level: 40, vision: 70, passing: 90, defence: 80, active: false, present: false, runner: false },
                 { id: 20, name: 'Risto P.', pos: 'D', level: 20, vision: 30, passing: 30, defence: 60, active: false, present: false, runner: false },
                 { id: 21, name: 'Tasi', pos: 'M', level: 70, vision: 50, passing: 60, defence: 60, active: true, present: false, runner: false },
                 { id: 22, name: 'Timo J.', pos: 'D', level: 90, vision: 80, passing: 100, defence: 100, active: true, present: false, runner: true },
@@ -1329,7 +1329,7 @@
                                     <div class="player-name">${p.name}</div>
                                     <div class="player-meta">
                                       <span class="pos-badge pos-${pos}">${POS_SHORT[pos]}</span>
-                                      <span class="star-badge">${p.runner ? '⭐' : ''}</span>
+                                      <span class="star-badge">${p.runner ? '🦵' : ''}</span>
                                     </div>
                                   </div>
                                 </div>`;
