@@ -1183,10 +1183,10 @@
 
         function getDefaultPlayers() {
             return [
-                { id: 1, name: 'Apa', pos: 'M', level: 70, vision: 100, passing: 100, defence: 80, active: true, present: false, runner: true },
+                { id: 1, name: 'Apa', pos: 'M', level: 90, vision: 100, passing: 100, defence: 80, active: true, present: false, runner: true },
                 { id: 2, name: 'Ari', pos: 'F', level: 80, vision: 50, passing: 60, defence: 40, active: true, present: false, runner: true },
                 { id: 3, name: 'Aku', pos: 'M', level: 80, vision: 90, passing: 90, defence: 70, active: true, present: false, runner: true },
-                { id: 4, name: 'Arto', pos: 'M', level: 100, vision: 60, passing: 80, defence: 100, active: true, present: false, runner: true },
+                { id: 4, name: 'Arto', pos: 'M', level: 100, vision: 50, passing: 80, defence: 70, active: true, present: false, runner: true },
                 { id: 5, name: 'Charlie', pos: 'F', level: 40, vision: 50, passing: 40, defence: 40, active: true, present: false, runner: false },
                 { id: 6, name: 'Eero', pos: 'M', level: 100, vision: 60, passing: 80, defence: 90, active: true, present: false, runner: true },
                 { id: 7, name: 'Ilpo', pos: 'M', level: 100, vision: 60, passing: 100, defence: 20, active: true, present: false, runner: true },
@@ -1213,19 +1213,19 @@
                 { id: 28, name: 'Hannu S.', pos: 'D', level: 50, vision: 50, passing: 50, defence: 80, active: true, present: false, runner: false },
                 { id: 29, name: 'Jooa', pos: 'M', level: 100, vision: 100, passing: 100, defence: 80, active: false, present: false, runner: true },
                 { id: 30, name: 'Juusa', pos: 'M', level: 100, vision: 100, passing: 100, defence: 80, active: false, present: false, runner: true },
-                { id: 31, name: 'Niki', pos: 'M', level: 100, vision: 80, passing: 100, defence: 60, active: false, present: false, runner: true },
-                { id: 32, name: 'Luca', pos: 'M', level: 70, vision: 70, passing: 60, defence: 60, active: false, present: false, runner: false },
+                //{ id: 31, name: 'Niki', pos: 'M', level: 100, vision: 80, passing: 100, defence: 60, active: false, present: false, runner: true },
+                //{ id: 32, name: 'Luca', pos: 'M', level: 70, vision: 70, passing: 60, defence: 60, active: false, present: false, runner: false },
                 { id: 33, name: 'Kille', pos: 'F', level: 30, vision: 50, passing: 40, defence: 10, active: true, present: false, runner: false },
                 { id: 34, name: 'Keijo', pos: 'D', level: 20, vision: 30, passing: 30, defence: 90, active: false, present: false, runner: false },
                 { id: 35, name: 'Jussi N.', pos: 'D', level: 90, vision: 40, passing: 40, defence: 90, active: true, present: false, runner: true },
                 { id: 36, name: 'Jouni T.', pos: 'F', level: 40, vision: 80, passing: 60, defence: 20, active: true, present: false, runner: false },
-                { id: 37, name: 'Markus', pos: 'M', level: 50, vision: 100, passing: 100, defence: 10, active: false, present: false, runner: false },
+                //{ id: 37, name: 'Markus', pos: 'M', level: 50, vision: 100, passing: 100, defence: 10, active: false, present: false, runner: false },
                 { id: 38, name: 'Ana', pos: 'M', level: 10, vision: 50, passing: 30, defence: 10, active: true, present: false, runner: false },
-                { id: 39, name: 'Manlio', pos: 'M', level: 70, vision: 30, passing: 30, defence: 70, active: false, present: false, runner: false },
+                //{ id: 39, name: 'Manlio', pos: 'M', level: 70, vision: 30, passing: 30, defence: 70, active: false, present: false, runner: false },
                 { id: 40, name: 'J-P', pos: 'D', level: 70, vision: 50, passing: 50, defence: 70, active: true, present: false, runner: false },
-                { id: 41, name: 'Jommu', pos: 'D', level: 40, vision: 70, passing: 60, defence: 70, active: false, present: false, runner: false },
-                { id: 42, name: 'Joni', pos: 'M', level: 100, vision: 80, passing: 80, defence: 80, active: false, present: false, runner: true },
-                { id: 43, name: 'Viljo', pos: 'M', level: 100, vision: 60, passing: 70, defence: 50, active: false, present: false, runner: true },
+                //{ id: 41, name: 'Jommu', pos: 'D', level: 40, vision: 70, passing: 60, defence: 70, active: false, present: false, runner: false },
+                //{ id: 42, name: 'Joni', pos: 'M', level: 100, vision: 80, passing: 80, defence: 80, active: false, present: false, runner: true },
+                //{ id: 43, name: 'Viljo', pos: 'M', level: 100, vision: 60, passing: 70, defence: 50, active: false, present: false, runner: true },
                 { id: 44, name: 'Arto A', pos: 'M', level: 50, vision: 70, passing: 50, defence: 30, active: false, present: false, runner: false },
                 { id: 45, name: 'Jyrki', pos: 'M', level: 50, vision: 50, passing: 50, defence: 60, active: true, present: false, runner: false },
             ];
@@ -1714,7 +1714,7 @@
                 const vestClick = fromTeam === 'B' ? `onclick="toggleVest(${p.id})"` : '';
                 const vestClass = isVested ? ' vest-given' : '';
                 const vestCursor = fromTeam === 'B' ? 'cursor:pointer;' : '';
-                const starPlayer = p.runner ? '⭐' : '';
+                const starPlayer = p.runner ? '🦵' : '';
                 const debugBadge = showDebug
                     ? `<span style="font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--yellow);font-weight:700;flex-shrink:0;">${playerScore(p)}</span>`
                     : '';
