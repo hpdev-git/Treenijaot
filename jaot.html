@@ -980,7 +980,7 @@
             <h1>⚽ ILVES 60+ <span>TREENIJAOT</span></h1>
             <div>
                 <div class="present-badge" id="presentBadge">0 paikalla</div>
-                <span class="version">v.2026.08.21(1)</span>
+                <span class="version">v.2026.10.06(1)</span>
             </div>
         </div>
         <div class="tabs">
@@ -1196,7 +1196,7 @@
                 { id: 11, name: 'Harry', pos: 'M', level: 40, vision: 80, passing: 60, defence: 60, active: true, present: false, runner: false },
                 { id: 12, name: 'Heikki H.', pos: 'M', level: 50, vision: 100, passing: 90, defence: 100, active: true, present: false, runner: false },
                 { id: 13, name: 'Ilkka J.', pos: 'M', level: 70, vision: 50, passing: 60, defence: 60, active: false, present: false, runner: false },
-                { id: 14, name: 'Ilkka M.', pos: 'M', level: 60, vision: 60, passing: 60, defence: 40, active: true, present: false, runner: false },
+                { id: 14, name: 'Ilkka M.', pos: 'M', level: 70, vision: 60, passing: 70, defence: 40, active: true, present: false, runner: false },
                 { id: 15, name: 'Jouni K.', pos: 'D', level: 70, vision: 70, passing: 70, defence: 100, active: true, present: false, runner: false },
                 { id: 16, name: 'Suiho', pos: 'M', level: 40, vision: 100, passing: 90, defence: 50, active: true, present: false, runner: false },
                 { id: 17, name: 'Jussi H.', pos: 'M', level: 60, vision: 50, passing: 50, defence: 30, active: true, present: false, runner: false },
@@ -1206,7 +1206,7 @@
                 { id: 21, name: 'Tasi', pos: 'M', level: 70, vision: 50, passing: 60, defence: 60, active: true, present: false, runner: false },
                 { id: 22, name: 'Timo J.', pos: 'D', level: 90, vision: 80, passing: 100, defence: 100, active: true, present: false, runner: true },
                 { id: 23, name: 'Jampe', pos: 'D', level: 60, vision: 70, passing: 60, defence: 90, active: true, present: false, runner: false },
-                { id: 24, name: 'Jokke', pos: 'D', level: 80, vision: 40, passing: 60, defence: 70, active: true, present: false, runner: true },
+                { id: 24, name: 'Jokke', pos: 'D', level: 80, vision: 40, passing: 50, defence: 60, active: true, present: false, runner: true },
                 { id: 25, name: 'Hati', pos: 'M', level: 40, vision: 60, passing: 40, defence: 60, active: true, present: false, runner: false },
                 { id: 26, name: 'Tero', pos: 'F', level: 30, vision: 30, passing: 30, defence: 10, active: true, present: false, runner: false },
                 { id: 27, name: 'Matti M.', pos: 'F', level: 20, vision: 70, passing: 30, defence: 10, active: true, present: false, runner: false },
@@ -1367,7 +1367,8 @@
         // --- TEAMS ---
         function renderTeamsView() {
             const present = presentPlayers();
-            document.getElementById('teamsPresent').textContent = present.length + ' pelaajaa';
+	    if (document.getElementById('teamsPresent') !== null)
+            	document.getElementById('teamsPresent').textContent = present.length + ' pelaajaa';
             document.getElementById('splitBtn').disabled = present.length < 2;
             if (currentTeams) renderTeamBoxes(currentTeams);
         }
@@ -1551,7 +1552,7 @@
             if (!team.length) return 0;
             const fullMids = team.filter(p => p.pos === 'M' && playerScore(p) === 100).length / team.length;
             const fullDefs = team.filter(p => p.pos === 'D' && playerScore(p) === 100).length / team.length;
-            const avg = team.reduce((s, p) => s + playerScore(p), 0) / team.length;
+            let avg = team.reduce((s, p) => s + playerScore(p), 0) / team.length;
             const sizeDiff = Math.max(0, team.length - otherTeam.length);
             const playerCount = team.length + otherTeam.length;
             let extraBonus = 0;
@@ -1562,11 +1563,15 @@
                 }
             }
 
+	    if (extraBonus != 0)
+		avg = (team.reduce((s, p) => s + playerScore(p), 0) + avg) / (team.length);
+
+
             if (useWeighting)
                 return fullMids * 100 + fullDefs * 100 + avg + extraBonus;
 
-            return avg + extraBonus;
-            //return fullMids * 400 + fullDefs * 300 + avg + extraBonus;
+            return avg //+ extraBonus;
+
         }
 
         function generateCommentary(teamA, teamB) {
@@ -1833,7 +1838,6 @@
                                 ${commentary.map(c => `<div class="commentary-item">${c}</div>`).join('')}
                               </div>` : ''}
                             </div>
-                            <button class="shuffle-btn" onclick="shuffleTeams()">🔀 Sekoita uudelleen</button>
                           `;
         }
 
